@@ -1,0 +1,50 @@
+      /* Fondo oscuro con degradado neón */
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffea;
+        }
+        .tarjeta-login {
+            backdrop-filter: blur(15px);
+            background: rgba(10, 10, 10, 0.75);
+            border: 1px solid #00ffea;
+            box-shadow: 0 0 20px #00ffea;
+            animation: aparecer 1.2s ease-out;
+        }
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .campo-input {
+            background: #121212;
+            border: 1px solid #00ffea;
+            color: #00ffea;
+            transition: all 0.3s ease;
+        }
+        .campo-input::placeholder {
+            color: #00ffeaaa;
+        }
+        .campo-input:focus {
+            box-shadow: 0 0 10px #00ffea;
+            outline: none;
+            border-color: #00ffea;
+        }
+        .boton-brillo {
+            background: linear-gradient(90deg, #00ffea, #0077ff);
+            box-shadow: 0 0 15px #00ffea;
+            transition: all 0.3s ease;
+            color: #000;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+        }
+        .boton-brillo:hover {
+            box-shadow: 0 0 25px #00ffea, 0 0 40px #0077ff;
+            transform: translateY(-3px);
+        }
+        a {
+            color: #00ffea;
+            text-decoration: underline;
+        }
+        a:hover {
+            color: #0077ff;
+        }

@@ -1,0 +1,62 @@
+
+
+/* Estilos generales para el panel */
+body {
+    background-color: #212529; /* Fondo oscuro principal, como en tu login */
+    color: #f8f9fa; /* Texto blanco */
+    font-family: 'Orbitron', sans-serif; /* Usamos la misma fuente de tu login */
+}
+
+/* --- Barra Lateral (Sidebar) --- */
+#sidebar {
+    width: 280px;
+    height: 100vh; /* Ocupa toda la altura */
+    position: fixed; /* Se queda fija al hacer scroll */
+    background-color: #343a40; /* Un gris oscuro, pero diferente al fondo */
+    box-shadow: 5px 0px 15px rgba(0,0,0,0.3); /* Una sombra para darle profundidad */
+}
+
+#sidebar .nav-link {
+    color: #f8f9fa;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+#sidebar .nav-link.active {
+    background-color: #00ffea; 
+    color: #212529; 
+    font-weight: bold;
+}
+
+#sidebar .nav-link:not(.active):hover {
+    background-color: #495057; 
+}
+
+/* --- Contenido Principal --- */
+#main-content {
+    margin-left: 280px; /* Deja espacio para la barra lateral */
+    width: calc(100% - 280px); /* Ocupa el resto del ancho */
+    padding: 2rem;
+}
+
+#content-title {
+    color: #00ffea; /* Título principal con el color de la marca */
+    text-shadow: 0 0 8px #00ffea;
+    border-bottom: 1px solid #495057;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Estilos para las Tablas --- */
+.table {
+    --bs-table-bg: #343a40;
+    --bs-table-striped-bg: #3e444a;
+    --bs-table-hover-bg: #495057;
+    --bs-table-border-color: #495057;
+    --bs-table-color: #f8f9fa;
+}
+
+.table thead {
+    color: #00ffea; 
+}

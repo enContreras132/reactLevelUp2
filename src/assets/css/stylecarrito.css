@@ -1,0 +1,28 @@
+body {
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffea;
+    }
+    .btn-neon {
+      background: linear-gradient(90deg, #00ffea, #0077ff);
+      box-shadow: 0 0 10px #00ffea;
+      transition: all 0.3s ease;
+      color: #000;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+    }
+    .btn-neon:hover {
+      box-shadow: 0 0 20px #00ffea, 0 0 30px #0077ff;
+      transform: translateY(-2px);
+    }
+    .card {
+      background: rgba(10, 10, 10, 0.75);
+      border: 1px solid #00ffea;
+      box-shadow: 0 0 15px #00ffea;
+      border-radius: 12px;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
