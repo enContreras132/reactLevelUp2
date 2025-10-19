@@ -21,3 +21,5 @@ If you are developing a production application, we recommend using TypeScript wi
 Instalar para el carrusel "npm install swiper"
 
 Instalar para bootstrap "npm install react-bootstrap bootstrap"
+
+Instalar para links del DOM "npm install react-router-dom"

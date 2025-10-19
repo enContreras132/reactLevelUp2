@@ -6,6 +6,7 @@ export default [
         nombre: "Mouse Gamer Monster RGB",
         precio: 7590,
         imagen: "https://i.bolder.run/r/czozMjIxLGc6NjkweA/477efa0d/711248-Mouse_B1.png",
+        categoria: "mouse",
         descripcion: "Mouse Gamer Monster con DPI: 800/1600/2400/3200/4000/8000, RGB, Cable trenzado de 1.5m y 6 Botones.",
         caracteristicas: [
             "DPI: 800/1600/2400/3200/4000/8000",
@@ -24,6 +25,7 @@ export default [
         nombre: "Audifonos Gamer Monster",
         precio: 5990,
         imagen: "https://i.bolder.run/r/czozMjIxLGc6NjkweA/424c2d92/710300-1_%283%29.png",
+        categoria: "audifonos",
         descripcion: "Audífonos Gamer Monster Loud 550BK. Formato Headset, con micrófono, compatible con Ps4 / Nswitch / X-one.",
         caracteristicas: [
             "Marca: Monster",
@@ -44,6 +46,7 @@ export default [
         nombre: "Mouse Razer Cobra Pro HyperSpeed",
         precio: 124640,
         imagen: "https://www.winpy.cl/files/w38389_razer_cobra_pro_hyperspeed_00.jpg",
+        categoria: "mouse",
         descripcion: "Ratón gaming inalámbrico y ergonómico con iluminación Razer Chroma™ RGB y tecnología HyperSpeed.",
         caracteristicas: [
             "Sensor óptico Focus Pro de 30 000 PPP",
@@ -63,6 +66,7 @@ export default [
         nombre: "Gamer Nitro V15 RTX 2050",
         precio: 699990,
         imagen: "https://www.acerstore.cl/cdn/shop/files/1_ANV15-51-53W1-1.png?v=1753392522&width=533",
+        categoria: "notebooks",
         descripcion: "Notebook gamer con Windows 11, 512GB de almacenamiento, 16GB RAM y pantalla FHD de 15,6 pulgadas.",
         caracteristicas: [
             "NVIDIA® GeForce RTX™ 2050",
@@ -81,6 +85,7 @@ export default [
         nombre: "Teclado Gamer Redragon Kumara",
         precio: 49990,
         imagen: "https://i.bolder.run/r/czozMjIxLGc6NjkweA/2d37a7fc/736207-Kumara1.png",
+        categoria: "teclados",
         descripcion: "La iluminación del Kumara K-552 RGB consta de teclas retroiluminadas configurables mediante software independiente.",
         caracteristicas: [
             "Formato: TKL (Tenkeyless)",
@@ -98,6 +103,7 @@ export default [
         nombre: "Mouse Gamer inalámbrico Lenovo Legion M600",
         precio: 59990,
         imagen: "https://p4-ofp.static.pub//fes/cms/2025/05/22/bbh4okj51q0s8dnrsp89vypi3l1nmz317151.png",
+        categoria: "mouse",
         descripcion: "Conexión inalámbrica inferior a 1 ms mediante 2,4 GHz, o conexión mediante BT de baja latencia o USB-C con cable.",
         caracteristicas: [
             "Conexión inalámbrica 2.4 GHz (< 1ms)",
@@ -116,6 +122,7 @@ export default [
         nombre: "Audífonos Gamer Rgb Altec Lansing Gh9602",
         precio: 30990,
         imagen: "https://www.hites.com/dw/image/v2/BDPN_PRD/on/demandware.static/-/Sites-mastercatalog_HITES/default/dw64a8ce06/images/original/mkp/1017300180100/10173001801001_1.jpg?sw=1000&sh=1000",
+        categoria: "audifonos",
         descripcion: "Los audífonos Gamers de Altec Lansing ALGH9602 con USB 7.1 son flexibles y están diseñados para durar.",
         caracteristicas: [
             "Sonido 7.1 USB",
@@ -134,6 +141,7 @@ export default [
         nombre: "Audifonos Gamer Kraken V4 X negro",
         precio: 89990,
         imagen: "https://http2.mlstatic.com/D_NQ_NP_658376-MLA82145082160_022025-O.webp",
+        categortia: "audifonos",
         descripcion: "Audio envolvente 7.1 para inmersión total en juegos. Almohadillas ovaladas de piel sintética para comodidad y aislamiento.",
         caracteristicas: [
             "Audio envolvente 7.1",
@@ -152,6 +160,7 @@ export default [
         nombre: "Teclado Mecanico Gamer RK Royal Kludge R65",
         precio: 69990,
         imagen: "https://www.chilegatillos.cl/cdn/shop/files/TecladoRKRoyalKludgeR65chilegatillos.cl.jpg?v=1717042966&width=2048",
+        categoria: "teclados",
         descripcion: "Diseñado para gamers y creadores que buscan control total y rendimiento insuperable. Ideal para aficionados, semiprofesionales y profesionales.",
         caracteristicas: [
             "Formato 65%",
