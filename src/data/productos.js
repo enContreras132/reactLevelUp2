@@ -1,4 +1,6 @@
-const productosData = [
+import { productos } from "./data";
+
+export default [
     {
         id: 1,
         nombre: "Mouse Gamer Monster RGB",
