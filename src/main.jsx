@@ -13,13 +13,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/font-awesome.min.css';
 import './assets/css/style.css';
 import './assets/css/responsive.css';
+import { BrowserRouter } from 'react-router-dom'
 // ---------------------------------------------
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
       <CartProvider>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </CartProvider>
     </AuthProvider>
   </React.StrictMode>,
