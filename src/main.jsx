@@ -1,16 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import './index.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+// --- Importa tus Contextos ---
+import { AuthProvider } from './context/AuthContext.jsx'
 import { CartProvider } from './context/CartContext.jsx'
-import { AuthProvider } from './context/AuthContext.jsx' // 1. Importamos AuthProvider
+
+// --- ¡AQUÍ VAN TUS ESTILOS GLOBALES! ---
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// estilos globales
+import './assets/css/font-awesome.min.css';
+import './assets/css/style.css';
+import './assets/css/responsive.css';
+// ---------------------------------------------
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* 2. Envolvemos la app con AMBOS proveedores.
-        Pueden ir en cualquier orden, pero AuthProvider 
-        suele ir por fuera. */}
     <AuthProvider>
       <CartProvider>
         <App />
