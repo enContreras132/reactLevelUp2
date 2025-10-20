@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Slider from "./slider";
 
 export default function Header() {
   return (
@@ -11,6 +10,15 @@ export default function Header() {
             <Link className="navbar-brand" to="/">
               <span>Level Up</span>
             </Link>
+            <Link className="navbar-brand" to="/productos">
+              Productos
+            </Link>
+            <div className="navbar-nav">
+              <Link className="nav-item nav-link" to="/carrito">
+                Carrito
+              </Link>
+            </div>
+
 
             <button
               className="navbar-toggler"

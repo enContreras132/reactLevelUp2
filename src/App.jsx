@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import './assets/css/style.css'
-import './assets/css/bootstrap.css'
+
+
 
 import Header from './components/Header.jsx'
-import CartPage from './pages/CartPage';
-import ProductDetailPage from './pages/ProductDetailPage'
-import HomePage from './pages/HomePage.jsx'
-import ProductPage from './pages/ProductPage.jsx';
-
+import CartPage from './components/Carrito.jsx';
+import Home from './components/Home.jsx'
+import Footer from './components/Footer.jsx';
+import { Routes, Route } from 'react-router-dom';
 
 
 
@@ -17,7 +16,8 @@ function App() {
   return (
     <>
       <Header />
-      
+      <Home />
+      <Footer />
     </>
   )
 }
