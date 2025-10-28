@@ -7,10 +7,10 @@ const Ofertas = () => {
       <div className="offer_container">
         <div className="container">
           <div className="row">
-            <div className="col-md-6">
-              <div className="box">
+            <div className="col-md-6 d-flex">
+              <div className="box w-100">
                 <div className="img-box">
-                  <img src="/assets/images/logolevelup (1).png" alt="Oferta Duocuc" />
+                  <img src="/src/assets/images/logolevelup_1.png" alt="Oferta Duocuc" />
                 </div>
                 <div className="detail-box">
                   <h5>Ofertas Por Registro con Correo de Duocuc</h5>
@@ -34,10 +34,10 @@ const Ofertas = () => {
                 </div>
               </div>
             </div>
-            <div className="col-md-6">
-              <div className="box">
+            <div className="col-md-6 d-flex">
+              <div className="box w-100">
                 <div className="img-box">
-                  <img src="/assets/images/logolevelup (1).png" alt="Oferta Fin de Semana" />
+                  <img src="/src/assets/images/logolevelup_1.png" alt="Oferta Fin de Semana" />
                 </div>
                 <div className="detail-box">
                   <h5>Ofertas Fin de Semana</h5>
