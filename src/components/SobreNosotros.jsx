@@ -7,7 +7,7 @@ function SobreNosotros() {
           <div className="row">
             <div className="col-md-6">
               <div className="img-box">
-                <img src="https://www.levelupvlc.com/_next/image?url=https%3A%2F%2Fhebbkx1anhila5yf.public.blob.vercel-storage.com%2Flogo-portrait-ycwjxbJNaPbJdVE0WBtXX0TDDC1DMg.webp&w=256&q=75" alt="" />
+                <img src="/src/assets/images/logolevelup_1.png" alt="Logo Level Up" />
               </div>
             </div>
             <div className="col-md-6">
