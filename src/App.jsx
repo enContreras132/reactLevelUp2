@@ -5,7 +5,7 @@ import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import ProductoPages from './pages/ProductoPages'
 import SobreNosotros from './components/SobreNosotros'
-import Separador from './components/Separador'
+
 
 
 function App() {
@@ -14,6 +14,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/productos" element={<ProductoPages />} />
+        <Route path="/sobrenosotros" element={<SobreNosotros />} />
       </Routes>
       <Footer />
     </>
