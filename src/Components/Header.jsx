@@ -44,10 +44,10 @@ const Header = () => {
             </ul>
 
             <div className="user_option d-flex align-items-center gap-3">
-              <Link to="/usuario" className="user_link">
+              <Link to="/login" className="user_link">
                 <i className="fa fa-user" aria-hidden="true"></i>
               </Link>
-              <Link className="cart_link" to="/carrito">
+              <Link className="cart_link" to="/cart">
                 <svg
                   version="1.1"
                   id="Capa_1"

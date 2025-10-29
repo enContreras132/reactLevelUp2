@@ -7,55 +7,117 @@ export default function Cart() {
 
   if (!items || items.length === 0) {
     return (
-      <section className="cart_section">
+      <section className="cart_section py-5 footer_section">
         <div className="container">
-          <h2>Tu carrito</h2>
-          <p>No hay productos en el carrito.</p>
-          <Link to="/productos">Ver productos</Link>
+          <div className="alert alert-info text-center text-dark" role="alert">
+            <h4 className="alert-heading mb-2" style={{ color: '#000' }}>Tu carrito está vacío</h4>
+            <p className="mb-3" style={{ color: '#000' }}>Aún no hay productos en el carrito.</p>
+            <Link to="/productos" className="btn btn-primary">
+              Ver productos
+            </Link>
+          </div>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="cart_section">
+    <section className="cart_section py-5 footer_section">
       <div className="container">
-        <h2>Tu carrito ({count})</h2>
-
-        <div className="cart_list">
-          {items.map((it) => (
-            <div key={it.id} className="cart_item" style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 12 }}>
-              <img
-                src={it.imagen || 'https://via.placeholder.com/100x80?text=Sin+imagen'}
-                alt={it.nombre}
-                style={{ width: 100, height: 80, objectFit: 'cover' }}
-              />
-              <div style={{ flex: 1 }}>
-                <h4 style={{ margin: 0 }}>{it.nombre}</h4>
-                <p style={{ margin: 4 }}>Precio: ${ (it.precio || 0).toLocaleString('es-CL') }</p>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <button type="button" onClick={() => updateQty(it.id, Math.max(1, (it.qty || 1) - 1))}>-</button>
-                  <span>{it.qty || 1}</span>
-                  <button type="button" onClick={() => updateQty(it.id, (it.qty || 1) + 1)}>+</button>
-                  <button type="button" onClick={() => removeItem(it.id)} style={{ marginLeft: 8 }}>Eliminar</button>
-                  <Link to={`/producto/${encodeURIComponent(it.id)}`} style={{ marginLeft: 8 }}>Ver</Link>
-                </div>
-              </div>
-              <div style={{ minWidth: 120, textAlign: 'right' }}>
-                <strong>${ ((it.precio || 0) * (it.qty || 1)).toLocaleString('es-CL') }</strong>
-              </div>
-            </div>
-          ))}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="h4 mb-0 text-white">Tu carrito</h2>
+          <small className="text-light">Items: {count}</small>
         </div>
 
-        <div className="cart_footer" style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <button type="button" onClick={clear}>Vaciar carrito</button>
+        <div className="row">
+          <div className="col-12 col-lg-8">
+            <div className="list-group">
+              {items.map((it) => (
+                <div
+                  key={it.id}
+                  className="list-group-item list-group-item-action mb-2 p-3 bg-transparent border-0"
+                >
+                  <div className="row g-3 align-items-center">
+                    <div className="col-4 col-sm-3 col-md-2">
+                      <img
+                        src={it.imagen || 'https://via.placeholder.com/200x150?text=Sin+imagen'}
+                        alt={it.nombre}
+                        className="img-fluid rounded"
+                      />
+                    </div>
+
+                    <div className="col-8 col-sm-6 col-md-7">
+                      <h5 className="mb-1 text-white">{it.nombre}</h5>
+                      <p className="mb-1 text-white small">
+                        {it.descripcion ? it.descripcion.substring(0, 120) + (it.descripcion.length > 120 ? '...' : '') : ''}
+                      </p>
+                      <div className="d-flex align-items-center gap-2 mt-2">
+                        <span className="fw-bold text-white">${((it.precio || 0) * (it.qty || 1)).toLocaleString('es-CL')}</span>
+                        <small className="text-light">(${(it.precio || 0).toLocaleString('es-CL')} c/u)</small>
+                      </div>
+                    </div>
+
+                    <div className="col-12 col-sm-3 col-md-3 text-md-end">
+                      <div className="d-flex justify-content-md-end align-items-center gap-2">
+                        <div className="input-group input-group-sm" style={{ width: 120 }}>
+                          <button
+                            className="btn btn-outline-light"
+                            type="button"
+                            onClick={() => updateQty(it.id, Math.max(1, (it.qty || 1) - 1))}
+                          >
+                            −
+                          </button>
+                          <input
+                            className="form-control text-center bg-white"
+                            value={it.qty || 1}
+                            readOnly
+                            aria-label="cantidad"
+                          />
+                          <button
+                            className="btn btn-outline-light"
+                            type="button"
+                            onClick={() => updateQty(it.id, (it.qty || 1) + 1)}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <div className="d-flex flex-column">
+                          <button className="btn btn-sm btn-danger mt-1" onClick={() => removeItem(it.id)}>
+                            Eliminar
+                          </button>
+                          <Link to={`/producto/${encodeURIComponent(it.id)}`} className="btn btn-sm btn-link mt-2 text-white">
+                            Ver
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <p style={{ margin: 0 }}>Total: <strong>${ total.toLocaleString('es-CL') }</strong></p>
-            <Link to="/checkout" style={{ display: 'inline-block', marginTop: 8 }}>Ir a pagar</Link>
-          </div>
+
+          <aside className="col-12 col-lg-4">
+            <div className="card" style={{ top: '1rem' }}>
+              <div className="card-body text-dark">
+                <h5 className="card-title text-dark">Resumen</h5>
+                <p className="card-text mb-2 text-dark">Productos: <strong className="text-dark">{count}</strong></p>
+                <p className="card-text mb-3 text-dark">Total: <strong className="text-dark">${total.toLocaleString('es-CL')}</strong></p>
+                <div className="d-grid gap-2">
+                  <Link to="/checkout" className="btn btn-success btn-block">
+                    Ir a pagar
+                  </Link>
+                  <button className="btn btn-outline-danger" onClick={clear}>
+                    Vaciar carrito
+                  </button>
+                  <Link to="/productos" className="btn btn-secondary">
+                    Seguir comprando
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
