@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Carrusel = () => {
   useEffect(() => {
@@ -16,35 +17,29 @@ const Carrusel = () => {
 
   const carruselFit = {
     height: '800px',
-    objectFit: 'cover'
+    objectFit: 'contain'
   };
 
   return (
     <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
-      <div className="carousel-inner">
+      <div className="carousel-inner mb-5">
         <div className="carousel-item active">
-          <img 
-            src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1120" 
-            className="d-block w-100" 
-            alt=""
-            style={carruselFit}
-          />
+          <Link to="/producto/6">
+            <img src="https://p4-ofp.static.pub//fes/cms/2025/05/22/bbh4okj51q0s8dnrsp89vypi3l1nmz317151.png" className="d-block w-100" alt="" style={carruselFit} />
+            <h3 className="text-center bbh-sans-bartle-regular text-white">Legion M600</h3>
+          </Link>
         </div>
         <div className="carousel-item">
-          <img 
-            src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1265" 
-            className="d-block w-100" 
-            alt=""
-            style={carruselFit}
-          />
+          <Link to="/producto/5">
+            <img src="https://media.spdigital.cl/thumbnails/products/8cj7010s_6fe796b6_thumbnail_4096.png" className="d-block w-100" alt="" style={carruselFit} />
+            <h3 className="text-center bbh-sans-bartle-regular text-white">Kumara K-552</h3>
+          </Link>
         </div>
         <div className="carousel-item">
-          <img 
-            src="https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" 
-            className="d-block w-100" 
-            alt=""
-            style={carruselFit}
-          />
+          <Link to="/producto/3">
+            <img src="src\assets\images\610-removebg-preview.png" className="d-block w-100" alt="" style={carruselFit} />
+            <h3 className="text-center bbh-sans-bartle-regular text-white">Razer Cobra Pro HyperSpeed</h3>
+          </Link>
         </div>
       </div>
       <button
@@ -65,6 +60,8 @@ const Carrusel = () => {
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="visually-hidden">Siguiente</span>
       </button>
+        <h2 className="text-center bbh-sans-bartle-regular">Elige nuestros mejores productos</h2>
+
     </div>
   );
 };

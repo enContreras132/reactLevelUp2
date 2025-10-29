@@ -16,18 +16,18 @@ export default function Productos() {
         <div className="filters-content">
           <div className="row grid">
             {productos.map((p) => (
-              <div key={p.id} className="col-sm-6 col-lg-4 all">
-                <div className="box">
+              <div key={p.id} className="col-sm-6 col-lg-4 all d-flex">
+                <div className="box w-100 d-flex flex-column">
                   <div className="img-box">
                     <img
                       src={p.imagen || 'https://via.placeholder.com/400x300?text=Sin+imagen'}
                       alt={p.nombre}
                     />
                   </div>
-                  <div className="detail-box">
+                  <div className="detail-box flex-grow-1 d-flex flex-column">
                     <h5>{p.nombre}</h5>
                     {p.descripcion && <p>{p.descripcion}</p>}
-                    <div className="options">
+                    <div className="options mt-auto">
                       <h6>${(p.precio || 0).toLocaleString('es-CL')}</h6>
                       <Link to={`/producto/${encodeURIComponent(p.id)}`}>Ver producto</Link>
                       <button

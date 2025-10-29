@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SearchDropdown from "../Components/SearchDropdown.jsx";
+
 
 const Header = () => {
   return (
@@ -13,13 +15,13 @@ const Header = () => {
           <button
             className="navbar-toggler"
             type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className=""></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
 
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -41,7 +43,7 @@ const Header = () => {
               </li>
             </ul>
 
-            <div className="user_option">
+            <div className="user_option d-flex align-items-center gap-3">
               <Link to="/usuario" className="user_link">
                 <i className="fa fa-user" aria-hidden="true"></i>
               </Link>
@@ -60,26 +62,7 @@ const Header = () => {
                   <path d="M0 24C0 10.7 10.7 0 24 0H69.5c10.3 0 19.4 6.6 22.6 16.4L96 32H552c13.3 0 24 10.7 24 24c0 2.6-.4 5.1-1.2 7.5l-72 240c-4.3 14.2-17.2 24-32 24H164.5l5.4 24H496c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-10.3 0-19.4-6.6-22.6-16.4L81.2 54.5 69.5 16H24C10.7 16 0 10.7 0 24zm160 400a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm288 0a48 48 0 1 1 96 0 48 48 0 1 1 -96 0z" />
                 </svg>
               </Link>
-              <div>
-                <div className="dropdown-container">
-                  <button id="btnSearch" className="btn btn-primary btn-sm">
-                    Buscar
-                  </button>
-                  <div id="dropdownContent" className="dropdown-menu-custom">
-                    <input
-                      type="text"
-                      id="searchInput"
-                      className="form-control mb-2"
-                      placeholder="Escribe para buscar..."
-                    />
-                    <ul
-                      id="resultsList"
-                      className="list-group"
-                      style={{ maxHeight: "200px", overflowY: "auto" }}
-                    ></ul>
-                  </div>
-                </div>
-              </div>
+              <SearchDropdown />
             </div>
           </div>
         </nav>

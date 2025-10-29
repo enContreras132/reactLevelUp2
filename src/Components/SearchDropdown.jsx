@@ -1,19 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { productosData } from '../data/data';
+import { productos } from '../data/data.js';
 
 export default function SearchDropdown({ items = null }) {
   const navigate = useNavigate();
-  const allItems = items ?? productosData.map(p => p.nombre);
+  const allItems = useMemo(() => (items ?? productos), [items]);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState(allItems);
+  const [results, setResults] = useState([]);
   const ref = useRef(null);
 
   useEffect(() => {
-    setResults(
-      allItems.filter(it => it.toLowerCase().includes(query.toLowerCase()))
-    );
+    const q = query.trim().toLowerCase();
+    setResults(q ? allItems.filter(p => p.nombre.toLowerCase().includes(q)) : []);
   }, [query, allItems]);
 
   useEffect(() => {
@@ -24,11 +23,10 @@ export default function SearchDropdown({ items = null }) {
     return () => document.removeEventListener('click', onDocClick);
   }, []);
 
-  function onSelect(item) {
-    // navegar a búsqueda o detalle; aquí ejemplo: ruta /search?q=...
+  function onSelect(product) {
     setOpen(false);
     setQuery('');
-    navigate(`/search?q=${encodeURIComponent(item)}`);
+    navigate(`/producto/${product.id}`);
   }
 
   return (
@@ -56,20 +54,20 @@ export default function SearchDropdown({ items = null }) {
             autoFocus
           />
           <ul id="resultsList" className="list-group">
-            {results.length === 0 ? (
-              <li className="list-group-item">No hay resultados</li>
-            ) : (
-              results.map((item) => (
-                <li
-                  key={item}
-                  className="list-group-item list-group-item-action"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => onSelect(item)}
-                >
-                  {item}
-                </li>
-              ))
-            )}
+            {query.trim().length === 0
+              ? null
+              : results.length === 0
+              ? (<li className="list-group-item">No hay resultados</li>)
+              : results.map((item) => (
+                  <li
+                    key={item.id}
+                    className="list-group-item list-group-item-action"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => onSelect(item)}
+                  >
+                    {item.nombre}
+                  </li>
+                ))}
           </ul>
         </div>
       )}
