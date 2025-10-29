@@ -5,9 +5,10 @@ import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import ProductoPages from './pages/ProductoPages'
 import AboutPage from './pages/AboutPage.jsx'
-import SingleProduct from './Components/SingleProduct.jsx'
+import SingleProduct from './components/SingleProduct.jsx'
 import CartPage from './pages/CartPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
+import Registro from './components/Registro.jsx'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/productos" element={<ProductoPages />} />
         <Route path="/sobrenosotros" element={<AboutPage />} />
         <Route path="/producto/:id" element={<SingleProduct />} />
+        <Route path="/registro" element={<Registro />} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>
       <Footer />
