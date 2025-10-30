@@ -1,4 +1,36 @@
+import React from 'react';
+import { useFormValidation } from '../utils/useFormValidation.js';
+
 function Registro() {
+    const {
+        formData,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        validateAllFields,
+        getFieldClass,
+        resetForm
+    } = useFormValidation({
+        nombre: '',
+        telefono: '',
+        mail: '',
+        rut: '',
+        nacimiento: '',
+        direccion: ''
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (validateAllFields()) {
+            console.log('Formulario válido:', formData);
+            alert('Formulario enviado correctamente');
+            // Aquí puedes hacer el POST a tu API
+            // resetForm(); // Descomentar si quieres limpiar el form después de enviar
+        }
+    };
+
     return (
         <>
             {/* book section */}
@@ -12,39 +44,89 @@ function Registro() {
                     <div className="row">
                         <div className="col-md-6">
                             <div className="form_container">
-                                <form id="formulario" action>
-                                    <div className="form-controlador">
+                                <form id="formulario" onSubmit={handleSubmit}>
+                                    <div className={getFieldClass('nombre')}>
                                         <label htmlFor="nombre" style={{color: 'white'}}>Nombre</label>
-                                        <input id="nombre" type="text" className="form-controlador form-control" />
-                                        <p />
+                                        <input 
+                                            id="nombre" 
+                                            name="nombre"
+                                            type="text" 
+                                            className="form-control" 
+                                            value={formData.nombre}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.nombre && errors.nombre && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.nombre}</p>}
                                     </div>
-                                    <div className="form-controlador">
+                                    <div className={getFieldClass('telefono')}>
                                         <label htmlFor="telefono" style={{color: 'white'}}>Numero de telefono</label>
-                                        <input id="telefono" type="tel" className="form-controlador form-control" />
-                                        <p />
+                                        <input 
+                                            id="telefono" 
+                                            name="telefono"
+                                            type="tel" 
+                                            className="form-control" 
+                                            placeholder="+56912345678"
+                                            value={formData.telefono}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.telefono && errors.telefono && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.telefono}</p>}
                                     </div>
-                                    <div className="form-controlador">
+                                    <div className={getFieldClass('mail')}>
                                         <label htmlFor="mail" style={{color: 'white'}}>Email</label>
-                                        <input id="mail" type="email" className="form-control" />
-                                        <p />
+                                        <input 
+                                            id="mail" 
+                                            name="mail"
+                                            type="email" 
+                                            className="form-control" 
+                                            value={formData.mail}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.mail && errors.mail && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.mail}</p>}
                                     </div>
-                                    <div className="form-controlador">
-                                        <label htmlFor="rut" style={{color: 'white'}}>Rut (12.345.678-9)</label>
-                                        <input id="rut" type="text" className="form-control" />
-                                        <p />
+                                    <div className={getFieldClass('rut')}>
+                                        <label htmlFor="rut" style={{color: 'white'}}>Rut (12345678-9)</label>
+                                        <input 
+                                            id="rut" 
+                                            name="rut"
+                                            type="text" 
+                                            className="form-control" 
+                                            placeholder="12345678-9"
+                                            value={formData.rut}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.rut && errors.rut && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.rut}</p>}
                                     </div>
-                                    <div className="form-controlador">
+                                    <div className={getFieldClass('nacimiento')}>
                                         <label htmlFor="nacimiento" style={{color: 'white'}}>Fecha de nacimiento</label>
-                                        <input id="nacimiento" type="date" className="form-control" />
-                                        <p />
+                                        <input 
+                                            id="nacimiento" 
+                                            name="nacimiento"
+                                            type="date" 
+                                            className="form-control" 
+                                            value={formData.nacimiento}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.nacimiento && errors.nacimiento && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.nacimiento}</p>}
                                     </div>
-                                    <div className="form-controlador">
+                                    <div className={getFieldClass('direccion')}>
                                         <label htmlFor="direccion" style={{color: 'white'}}>Dirección</label>
-                                        <input id="direccion" type="text" className="form-control" />
-                                        <p />
+                                        <input 
+                                            id="direccion" 
+                                            name="direccion"
+                                            type="text" 
+                                            className="form-control" 
+                                            value={formData.direccion}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.direccion && errors.direccion && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.direccion}</p>}
                                     </div>
                                     <div className="btn_box">
-                                        <button>
+                                        <button type="submit">
                                             Registrarme
                                         </button>
                                     </div>

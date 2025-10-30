@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { productos } from "../data/data.js";
+import { useCart } from "../context/CartContext";
 
 function formatCurrency(value) {
   try {
@@ -16,6 +17,7 @@ function formatCurrency(value) {
 function SingleProduct() {
   const { id } = useParams();
   const product = productos.find((p) => p.id === Number(id));
+  const { addItem } = useCart();
 
   if (!product) {
     return (
@@ -86,7 +88,11 @@ function SingleProduct() {
               <Link to="/productos" className="btn btn-outline-secondary">
                 Volver
               </Link>
-              <button type="button" className="btn btn-primary">
+              <button 
+                type="button" 
+                className="btn btn-primary"
+                onClick={() => addItem(product, 1)}
+              >
                 Agregar al carrito
               </button>
             </div>

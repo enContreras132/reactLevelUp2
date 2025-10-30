@@ -338,7 +338,6 @@ a:focus {
 }
 
 .slider_section .detail-box h1 {
-  background-color: rgba(0, 0, 0, 0.7);
   font-size: 3.5rem;
   font-weight: bold;
   margin-bottom: 15px;
@@ -348,7 +347,6 @@ a:focus {
 .slider_section .detail-box p {
   font-size: 14px;
   display: inline-block;
-  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .slider_section .detail-box a {
@@ -758,8 +756,6 @@ a:focus {
 
 .form-controlador.falla p { 
   color: rgb(255, 255, 255); 
-  background-color: #00000080;
-  border: solid 0.1px #000000;
   display: inline-block;
 }
 

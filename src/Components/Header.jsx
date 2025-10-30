@@ -41,11 +41,6 @@ const Header = () => {
                   Nosotros
                 </Link>
               </li>
-                   <li className="nav-item">
-                <Link className="nav-link" to="/registro">
-                  Registrarse
-                </Link>
-              </li>
             </ul>
 
             <div className="user_option d-flex align-items-center gap-3">
