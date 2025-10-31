@@ -4,7 +4,7 @@ import { usuarios } from '../data/data';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [identifier, setIdentifier] = useState(''); // nombre de usuario o email
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -21,10 +21,22 @@ export default function Login() {
       setError('Usuario o contraseña incorrectos.');
       return;
     }
+
+    // Guardar en localStorage y sessionStorage para compatibilidad y persistencia
+    const payload = { id: user.id, nombre: user.nombre, rol: user.rol };
     try {
-      localStorage.setItem('user', JSON.stringify({ id: user.id, nombre: user.nombre, rol: user.rol }));
-    } catch {}
-    navigate('/');
+      localStorage.setItem('user', JSON.stringify(payload)); // persistente
+      sessionStorage.setItem('currentUser', JSON.stringify(payload)); // sesión actual
+    } catch (err) {
+      console.error('storage error', err);
+    }
+
+    // Redirigir según rol
+    if (user.rol === 'admin') {
+      navigate('/admin', { replace: true });
+    } else {
+      navigate('/', { replace: true });
+    }
   };
 
   return (

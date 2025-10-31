@@ -1096,16 +1096,16 @@ a:focus {
    margin-bottom: 0; 
 }
 
-/* ===== Login: estilos minimalistas ===== */
+
 :root{
-  --bg-900: #0b1220;    /* fondo principal muy oscuro */
-  --bg-800: #0f1724;    /* overlay */
-  --card:   #0f172a;    /* tarjeta */
-  --border: #16212b;    /* borde sutil */
-  --muted:  #98a0ac;    /* texto secundario */
-  --text:   #e6eef6;    /* texto principal claro */
-  --accent: #60a5fa;    /* acento azul suave */
-  --accent-2:#7dd3fc;   /* acento secundario suave */
+  --bg-900: #0b1220;    
+  --bg-800: #0f1724;    
+  --card:   #0f172a;    
+  --border: #16212b;    
+  --muted:  #98a0ac;    
+  --text:   #e6eef6;    
+  --accent: #60a5fa;    
+  --accent-2:#7dd3fc;   
 }
 
 .login-page{

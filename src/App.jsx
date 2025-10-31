@@ -9,7 +9,7 @@ import SingleProduct from './Components/SingleProduct.jsx'
 import CartPage from './pages/CartPage.jsx'
 import Registro from './Components/Registro.jsx'
 import LoginPage from './pages/LoginPage.jsx'
-
+import AdminPage from './pages/AdminPage.jsx'
 // Layout principal: renderiza Header + Outlet (ruta hija) + Footer
 function Layout() {
   return (
@@ -24,7 +24,7 @@ function Layout() {
 }
 
 // Layout que sólo muestra el Header (NO muestra Footer)
-// Usar este layout para páginas que deben estar "sin footer", p.ej. /login
+// Usar este layout para páginas que deben estar sin footer
 function HeaderOnlyLayout() {
   return (
     <>
@@ -41,7 +41,7 @@ function App() {
     <Routes>
       {/* 
         Rutas que usan Layout (Header + Footer)
-        - Todas las rutas aquí dentro renderizan Header arriba y Footer abajo.
+        !Todas las rutas aquí dentro renderizan Header arriba y Footer abajo.
       */}
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
@@ -54,11 +54,12 @@ function App() {
 
       {/*
         Rutas que usan sólo Header:
-        - Se agrupan bajo HeaderOnlyLayout para mostrar Header pero NO Footer.
-        - Añadir aquí las rutas que deben compartir sólo el header (ej: /login).
+         Se agrupan bajo HeaderOnlyLayout para mostrar Header pero NO Footer.
+         Añadir aquí las rutas que deben compartir sólo el header.
       */}
       <Route element={<HeaderOnlyLayout />}>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Route>
 
       {/* Ruta fallback (404) */}

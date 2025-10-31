@@ -1,16 +1,56 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import SearchDropdown from "../Components/SearchDropdown.jsx";
-
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { count } = useCart();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Leer sessionStorage primero; si no existe tratar de repoblar desde localStorage
+    const sessionRaw = sessionStorage.getItem('currentUser');
+    const localRaw = localStorage.getItem('user');
+
+    if (sessionRaw) {
+      try {
+        setUser(JSON.parse(sessionRaw));
+        return;
+      } catch {
+        sessionStorage.removeItem('currentUser');
+      }
+    }
+
+    if (localRaw) {
+      try {
+        // repoblar sessionStorage para consistencia entre rutas/recargas
+        sessionStorage.setItem('currentUser', localRaw);
+        setUser(JSON.parse(localRaw));
+        return;
+      } catch {
+        sessionStorage.removeItem('currentUser');
+        localStorage.removeItem('user');
+      }
+    }
+
+    setUser(null);
+  }, []);
+
+  function handleLogout(e) {
+    e && e.preventDefault();
+    sessionStorage.removeItem('currentUser');
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/', { replace: true });
+  }
+
   return (
     <header className="header_section">
       <div className="container">
         <nav className="navbar navbar-expand-lg custom_nav-container">
           <Link className="navbar-brand" to="/">
             <span>Level Up</span>
-
           </Link>
 
           <button
@@ -42,28 +82,47 @@ const Header = () => {
                   Nosotros
                 </Link>
               </li>
-
             </ul>
 
             <div className="user_option d-flex align-items-center gap-3">
-              <Link to="/login" className="user_link">
-                <i className="fa fa-user" aria-hidden="true"></i>
-              </Link>
-              <Link className="cart_link" to="/cart">
-                <svg
-                  version="1.1"
-                  id="Capa_1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                  x="0px"
-                  y="0px"
-                  viewBox="0 0 456.029 456.029"
-                  style={{ enableBackground: "new 0 0 456.029 456.029" }}
-                  xmlSpace="preserve"
-                >
+              {user ? (
+                <div className="nav-item dropdown">
+                  <a
+                    href="#user"
+                    className="nav-link dropdown-toggle d-flex align-items-center"
+                    id="userDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <i className="fa fa-user me-2" aria-hidden="true"></i>
+                    <span>{user.nombre}</span>
+                  </a>
+                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                      {user.rol === 'admin' ? (
+                        <Link className="dropdown-item" to="/admin">Panel Admin</Link>
+                      ) : (
+                        <Link className="dropdown-item" to="/perfil">Mi cuenta</Link>
+                      )}
+                    </li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <li><button className="dropdown-item" onClick={handleLogout}>Cerrar sesión</button></li>
+                  </ul>
+                </div>
+              ) : (
+                <Link to="/login" className="user_link">
+                  <i className="fa fa-user" aria-hidden="true"></i>
+                </Link>
+              )}
+
+              <Link className="cart_link position-relative" to="/cart" aria-label="Carrito">
+                <svg /* svg omitted for brevity; conserva tu svg actual */ viewBox="0 0 456.029 456.029" style={{ enableBackground: "new 0 0 456.029 456.029" }} xmlSpace="preserve">
                   <path d="M0 24C0 10.7 10.7 0 24 0H69.5c10.3 0 19.4 6.6 22.6 16.4L96 32H552c13.3 0 24 10.7 24 24c0 2.6-.4 5.1-1.2 7.5l-72 240c-4.3 14.2-17.2 24-32 24H164.5l5.4 24H496c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-10.3 0-19.4-6.6-22.6-16.4L81.2 54.5 69.5 16H24C10.7 16 0 10.7 0 24zm160 400a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm288 0a48 48 0 1 1 96 0 48 48 0 1 1 -96 0z" />
                 </svg>
+                {count > 0 && <span className="badge bg-danger position-absolute" style={{ top: -6, right: -6 }}>{count}</span>}
               </Link>
+
               <SearchDropdown />
             </div>
           </div>
