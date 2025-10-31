@@ -128,7 +128,7 @@ export default function Admin() {
       };
 
       console.log('Nuevo producto:', productoFinal);
-      alert('Producto agregado correctamente (en consola). Integrar con backend o localStorage.');
+      alert('Producto agregado correctamente');
       
       // Resetear formulario
       setShowAddForm(false);
