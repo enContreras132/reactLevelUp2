@@ -5,11 +5,15 @@ import * as data from '../data/data';
 // compatibilidad con distintos nombres de export en data.js
 const productos = data.productosData ?? data.productos ?? [];
 const pedidos = data.pedidos ?? [];
+const usuarios = data.usuarios ?? [];
 
 export default function Admin() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
-  const [view, setView] = useState('dashboard'); // 'dashboard' | 'productos' | 'pedidos'
+  const [view, setView] = useState('dashboard'); // 'dashboard' | 'productos' | 'pedidos' | 'usuarios'
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [newProduct, setNewProduct] = useState({});
 
   useEffect(() => {
     // Intentar leer sessionStorage primero, si no existe intentar localStorage
@@ -64,10 +68,232 @@ export default function Admin() {
   }
 
   function renderProductos() {
+    // Obtener categorías únicas
+    const categorias = [...new Set(productos.map(p => p.categoria).filter(Boolean))];
+    
+    // Campos base comunes para todos los productos
+    const camposBase = ['nombre', 'categoria', 'marca', 'precio', 'stock', 'imagen', 'descripcion'];
+    
+    // Campos específicos por categoría (basados en los productos existentes)
+    const camposPorCategoria = {
+      'Mouse': ['inalambrico', 'color', 'botonesCanti', 'dpi', 'dpiMin', 'dpiMax'],
+      'Audífonos': ['inalambrico', 'color', 'tipo', 'frecuenciaRespuesta', 'botonesCanti'],
+      'Notebook': ['procesador', 'ram', 'memoria', 'pantalla', 'tarjetaGrafica'],
+      'Teclado': ['inalambrico', 'color', 'dimension', 'switch']
+    };
+
+    const handleCategoryChange = (cat) => {
+      setSelectedCategory(cat);
+      // Inicializar campos base
+      const initProduct = {
+        nombre: '',
+        categoria: cat,
+        marca: '',
+        precio: '',
+        stock: '',
+        imagen: '',
+        descripcion: ''
+      };
+      
+      // Agregar campos específicos de la categoría
+      if (camposPorCategoria[cat]) {
+        camposPorCategoria[cat].forEach(campo => {
+          initProduct[campo] = '';
+        });
+      }
+      
+      setNewProduct(initProduct);
+    };
+
+    const handleInputChange = (campo, valor) => {
+      setNewProduct(prev => ({ ...prev, [campo]: valor }));
+    };
+
+    const handleSubmitProduct = (e) => {
+      e.preventDefault();
+      
+      // Validación básica
+      if (!newProduct.nombre || !newProduct.precio || !newProduct.stock) {
+        alert('Por favor completa los campos obligatorios: nombre, precio y stock');
+        return;
+      }
+
+      // Generar nuevo ID
+      const maxId = Math.max(...productos.map(p => p.id), 0);
+      const productoFinal = {
+        ...newProduct,
+        id: maxId + 1,
+        precio: Number(newProduct.precio),
+        stock: Number(newProduct.stock)
+      };
+
+      console.log('Nuevo producto:', productoFinal);
+      alert('Producto agregado correctamente (en consola). Integrar con backend o localStorage.');
+      
+      // Resetear formulario
+      setShowAddForm(false);
+      setSelectedCategory('');
+      setNewProduct({});
+    };
+
+    const renderFormField = (campo) => {
+      const labels = {
+        nombre: 'Nombre *',
+        categoria: 'Categoría *',
+        marca: 'Marca',
+        precio: 'Precio *',
+        stock: 'Stock *',
+        imagen: 'URL Imagen',
+        descripcion: 'Descripción',
+        inalambrico: 'Inalámbrico',
+        color: 'Color',
+        botonesCanti: 'Cantidad de botones',
+        dpi: 'DPI',
+        dpiMin: 'DPI Mínimo',
+        dpiMax: 'DPI Máximo',
+        tipo: 'Tipo',
+        frecuenciaRespuesta: 'Frecuencia de respuesta',
+        procesador: 'Procesador',
+        ram: 'RAM',
+        memoria: 'Memoria',
+        pantalla: 'Pantalla',
+        tarjetaGrafica: 'Tarjeta Gráfica',
+        dimension: 'Dimensión',
+        switch: 'Switch'
+      };
+
+      const tipoInput = ['precio', 'stock', 'botonesCanti', 'dpi', 'dpiMin', 'dpiMax'].includes(campo) 
+        ? 'number' 
+        : 'text';
+
+      if (campo === 'categoria') {
+        return null; // Ya se seleccionó antes
+      }
+
+      if (campo === 'descripcion') {
+        return (
+          <div key={campo} className="col-12">
+            <label className="form-label text-light">{labels[campo]}</label>
+            <textarea
+              className="form-control"
+              rows={3}
+              value={newProduct[campo] || ''}
+              onChange={(e) => handleInputChange(campo, e.target.value)}
+            />
+          </div>
+        );
+      }
+
+      if (campo === 'inalambrico') {
+        return (
+          <div key={campo} className="col-md-6">
+            <label className="form-label text-light">{labels[campo]}</label>
+            <select
+              className="form-select"
+              value={newProduct[campo] || ''}
+              onChange={(e) => handleInputChange(campo, e.target.value)}
+            >
+              <option value="">Seleccionar</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        );
+      }
+
+      return (
+        <div key={campo} className="col-md-6">
+          <label className="form-label text-light">{labels[campo]}</label>
+          <input
+            type={tipoInput}
+            className="form-control"
+            value={newProduct[campo] || ''}
+            onChange={(e) => handleInputChange(campo, e.target.value)}
+          />
+        </div>
+      );
+    };
+
     return (
       <div>
-        <h2 className="mb-3">Productos
-        </h2>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="mb-0">Productos</h2>
+          <button 
+            className="btn btn-success"
+            onClick={() => setShowAddForm(!showAddForm)}
+          >
+            <i className="bi bi-plus-lg me-1"></i>
+            {showAddForm ? 'Cancelar' : 'Agregar producto'}
+          </button>
+        </div>
+
+        {showAddForm && (
+          <div className="card mb-4" style={{ backgroundColor: '#1a1f2e', border: '1px solid #00ffea' }}>
+            <div className="card-body">
+              <h5 className="card-title text-light mb-3">Nuevo Producto</h5>
+              
+              {!selectedCategory ? (
+                <div>
+                  <label className="form-label text-light">Selecciona una categoría:</label>
+                  <div className="d-flex flex-wrap gap-2">
+                    {categorias.map(cat => (
+                      <button
+                        key={cat}
+                        className="btn btn-outline-info"
+                        onClick={() => handleCategoryChange(cat)}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmitProduct}>
+                  <div className="alert alert-info mb-3">
+                    <strong>Categoría seleccionada:</strong> {selectedCategory}
+                    <button 
+                      type="button"
+                      className="btn btn-sm btn-outline-secondary ms-3"
+                      onClick={() => {
+                        setSelectedCategory('');
+                        setNewProduct({});
+                      }}
+                    >
+                      Cambiar categoría
+                    </button>
+                  </div>
+
+                  <div className="row g-3">
+                    {/* Campos base */}
+                    {camposBase.map(campo => renderFormField(campo))}
+                    
+                    {/* Campos específicos de la categoría */}
+                    {camposPorCategoria[selectedCategory]?.map(campo => renderFormField(campo))}
+                  </div>
+
+                  <div className="mt-4 d-flex gap-2">
+                    <button type="submit" className="btn btn-primary">
+                      <i className="bi bi-save me-1"></i>
+                      Guardar Producto
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn btn-outline-secondary"
+                      onClick={() => {
+                        setShowAddForm(false);
+                        setSelectedCategory('');
+                        setNewProduct({});
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="table-responsive">
           <table className="table table-hover table-dark">
             <thead>
@@ -132,6 +358,44 @@ export default function Admin() {
     );
   }
 
+  function renderUsuarios() {
+    return (
+      <div>
+        <h2 className="mb-3">Usuarios</h2>
+        <div className="table-responsive">
+          <table className="table table-hover table-dark">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usuarios.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.id}</td>
+                  <td>{u.nombre}</td>
+                  <td>{u.email}</td>
+                  <td>
+                    <span className={`badge ${
+                      u.rol === 'admin' ? 'bg-danger' : 
+                      u.rol === 'pedidos' ? 'bg-warning' : 
+                      'bg-info'
+                    }`}>
+                      {u.rol}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
   if (!currentUser) return null; // evita render previo a la comprobación
 
   const { rol } = currentUser;
@@ -165,6 +429,14 @@ export default function Admin() {
               </a>
             </li>
           )}
+
+          {rol === 'admin' && (
+            <li>
+              <a href="#usuarios" className={`nav-link ${view === 'usuarios' ? 'active' : 'text-white'}`} onClick={(e) => { e.preventDefault(); setView('usuarios'); }}>
+                <i className="bi bi-people me-2"></i> Usuarios
+              </a>
+            </li>
+          )}
         </ul>
 
         <hr style={{ borderColor: 'rgba(255,255,255,0.06)' }} />
@@ -184,13 +456,17 @@ export default function Admin() {
 
       <main id="main-content" className="flex-grow-1 p-4" style={{ minHeight: '100vh', background: '#071021' }}>
         <h1 id="content-title" className="text-light mb-3">
-          {view === 'dashboard' ? 'Dashboard' : view === 'productos' ? 'Gestión de Productos' : 'Gestión de Pedidos'}
+          {view === 'dashboard' ? 'Dashboard' : 
+           view === 'productos' ? 'Gestión de Productos' : 
+           view === 'pedidos' ? 'Gestión de Pedidos' : 
+           'Gestión de Usuarios'}
         </h1>
 
         <div id="content-area" className="text-light">
           {view === 'dashboard' && renderDashboard()}
           {view === 'productos' && renderProductos()}
           {view === 'pedidos' && renderPedidos()}
+          {view === 'usuarios' && renderUsuarios()}
         </div>
       </main>
     </div>

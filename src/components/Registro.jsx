@@ -26,10 +26,18 @@ function Registro() {
         e.preventDefault();
 
         if (validateAllFields()) {
-            console.log('Formulario válido:', formData);
-            alert('Formulario enviado correctamente');
-            // Aquí puedes hacer el POST a tu API
-            // resetForm(); // Descomentar si quieres limpiar el form después de enviar
+            const user = {
+                id: `cli-${Date.now()}`,
+                nombre: formData.nombre,
+                email: formData.mail,
+                rol: 'cliente',
+            };
+            try {
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+            } catch {}
+            // Opcional: redirige de vuelta al checkout
+            navigate('/checkout', { replace: true });
+            resetForm(); // Si quieres limpiar el form
         }
     };
 

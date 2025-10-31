@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { productos } from '../data/data';
+import { productos as baseProductos } from '../data/data';
 import { useCart } from '../context/CartContext';
 
 export default function Productos() {
   const { addItem } = useCart();
   const [categoria, setCategoria] = useState("todos");
+
+  // Mezclar productos base con los agregados por trabajador desde localStorage
+  const productos = useMemo(() => {
+    try {
+      const raw = localStorage.getItem('customProductos');
+      const custom = raw ? JSON.parse(raw) : [];
+      return [...baseProductos, ...custom];
+    } catch {
+      return [...baseProductos];
+    }
+  }, []);
 
   // Obtener categorías únicas de los productos
   const categorias = ["todos", ...new Set(productos.map(p => p.categoria).filter(Boolean))];
@@ -18,24 +29,21 @@ export default function Productos() {
   return (
     <section className="food_section layout_padding-bottom">
       <div className="container">
-        <div className="heading_container heading_center">
+        <div className="heading_container heading_center mb-4">
           <h2>Productos Disponibles</h2>
         </div>
 
-        {/* Filtros de categoría */}
-        <div className="filters_menu mb-4">
-          <ul className="filters_menu d-flex justify-content-center flex-wrap gap-2">
-            {categorias.map((cat) => (
-              <li 
-                key={cat} 
-                className={categoria === cat ? 'active' : ''}
-                onClick={() => setCategoria(cat)}
-                style={{ cursor: 'pointer' }}
-              >
-                {cat === "todos" ? "Todos" : cat}
-              </li>
-            ))}
-          </ul>
+     {/* filtros */}
+        <div className="filters-menu d-flex gap-2 mb-3 justify-content-center">
+          {categorias.map(cat => (
+            <button
+              key={cat}
+              className={`btn btn-sm ${categoria === cat ? 'btn-primary' : 'btn-outline-secondary'}`}
+              onClick={() => setCategoria(cat)}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         <div className="filters-content">

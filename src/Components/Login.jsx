@@ -51,8 +51,10 @@ export default function Login() {
     // Redirigir según rol
     if (user.rol === 'admin') {
       navigate('/admin', { replace: true });
+    } else if (user.rol === 'trabajador') {
+      navigate('/admin', { replace: true });
     } else {
-      navigate('/', { replace: true });
+      navigate('/checkout', { replace: true });
     }
   };
 
@@ -76,7 +78,7 @@ export default function Login() {
                 onBlur={handleBlur}
               />
               {touched.identifier && errors.identifier && (
-                <p style={{ color: 'white', backgroundColor: 'black' }}>{errors.identifier}</p>
+                <div className="alert alert-danger py-2 mt-2">{errors.identifier}</div>
               )}
             </div>
 
@@ -93,7 +95,7 @@ export default function Login() {
                 onBlur={handleBlur}
               />
               {touched.password && errors.password && (
-                <p style={{ color: 'white', backgroundColor: 'black' }}>{errors.password}</p>
+                <div className="alert alert-danger py-2 mt-2">{errors.password}</div>
               )}
             </div>
 

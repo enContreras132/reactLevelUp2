@@ -2,8 +2,8 @@
 // Aquí es donde el login buscará si el usuario y la contraseña son correctos.
 export const usuarios = [
   { id: 1, nombre: 'adminadmin', email: 'admin@levelup.com', pass: 'admin123', rol: 'admin' },
-  { id: 2, nombre: 'enzo (Pedidos)', email: 'pedidos@levelup.com', pass: 'pedidos123', rol: 'pedidos' },
-  { id: 3, nombre: 'Maxi (Stock)', email: 'inventario@levelup.com', pass: 'stock123', rol: 'inventario' }
+  { id: 2, nombre: 'Enzo', email: 'enzo123@gmail.com', pass: 'enzo123', rol: 'cliente' },
+  { id: 3, nombre: 'Maximiliano', email: 'maximiliano123@gmail.com', pass: 'maxi123', rol: 'cliente' }
 ];
 
 //  PRODUCTOS GAMERS no reales
