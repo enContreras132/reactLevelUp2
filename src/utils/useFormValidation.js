@@ -43,6 +43,12 @@ export function useFormValidation(initialValues) {
             case 'direccion':
                 if (value === '') error = 'campo vacio';
                 break;
+            case 'identifier':
+                if (value === '') error = 'campo vacio';
+                break;
+            case 'password':
+                if (value === '') error = 'campo vacio';
+                break;
             default:
                 break;
         }
