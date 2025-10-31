@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SearchDropdown from "../Components/SearchDropdown.jsx";
 import { useCart } from '../context/CartContext';
+// He cambiado la extensión a .png según tu petición
+import Logo from '../assets/images/logolevelupmini.png';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -9,7 +11,6 @@ const Header = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Leer sessionStorage primero; si no existe tratar de repoblar desde localStorage
     const sessionRaw = sessionStorage.getItem('currentUser');
     const localRaw = localStorage.getItem('user');
 
@@ -24,7 +25,6 @@ const Header = () => {
 
     if (localRaw) {
       try {
-        // repoblar sessionStorage para consistencia entre rutas/recargas
         sessionStorage.setItem('currentUser', localRaw);
         setUser(JSON.parse(localRaw));
         return;
@@ -49,8 +49,14 @@ const Header = () => {
     <header className="header_section">
       <div className="container">
         <nav className="navbar navbar-expand-lg custom_nav-container">
-          <Link className="navbar-brand" to="/">
-            <span>Level Up</span>
+          {/* Brand: logo a la izquierda, texto a la derecha (logo más grande) */}
+          <Link className="navbar-brand d-flex align-items-center" to="/">
+            <img
+              src={Logo}
+              alt="Level Up Logo"
+              style={{ height: 100, width: 'auto', objectFit: 'contain', marginRight: 15 }}
+            />
+            <span className="fw-bold">Level Up</span>
           </Link>
 
           <button
@@ -117,7 +123,7 @@ const Header = () => {
               )}
 
               <Link className="cart_link position-relative" to="/cart" aria-label="Carrito">
-                <svg /* svg omitted for brevity; conserva tu svg actual */ viewBox="0 0 456.029 456.029" style={{ enableBackground: "new 0 0 456.029 456.029" }} xmlSpace="preserve">
+                <svg viewBox="0 0 456.029 456.029" style={{ enableBackground: "new 0 0 456.029 456.029" }} xmlSpace="preserve">
                   <path d="M0 24C0 10.7 10.7 0 24 0H69.5c10.3 0 19.4 6.6 22.6 16.4L96 32H552c13.3 0 24 10.7 24 24c0 2.6-.4 5.1-1.2 7.5l-72 240c-4.3 14.2-17.2 24-32 24H164.5l5.4 24H496c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-10.3 0-19.4-6.6-22.6-16.4L81.2 54.5 69.5 16H24C10.7 16 0 10.7 0 24zm160 400a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm288 0a48 48 0 1 1 96 0 48 48 0 1 1 -96 0z" />
                 </svg>
                 {count > 0 && <span className="badge bg-danger position-absolute" style={{ top: -6, right: -6 }}>{count}</span>}
