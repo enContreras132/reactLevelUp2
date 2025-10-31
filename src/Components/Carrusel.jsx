@@ -25,19 +25,19 @@ const Carrusel = () => {
       <div className="carousel-inner mb-5">
         <div className="carousel-item active">
           <Link to="/producto/6">
-            <img src="https://p4-ofp.static.pub//fes/cms/2025/05/22/bbh4okj51q0s8dnrsp89vypi3l1nmz317151.png" className="d-block w-100" alt="" style={carruselFit} />
+            <img src="https://p4-ofp.static.pub//fes/cms/2025/05/22/bbh4okj51q0s8dnrsp89vypi3l1nmz317151.png" className="d-block w-100 img-hover-zoom" alt="" style={carruselFit} />
             <h3 className="text-center bbh-sans-bartle-regular text-white">Legion M600</h3>
           </Link>
         </div>
         <div className="carousel-item">
           <Link to="/producto/5">
-            <img src="https://media.spdigital.cl/thumbnails/products/8cj7010s_6fe796b6_thumbnail_4096.png" className="d-block w-100" alt="" style={carruselFit} />
+            <img src="https://media.spdigital.cl/thumbnails/products/8cj7010s_6fe796b6_thumbnail_4096.png" className="d-block w-100 img-hover-zoom" alt="" style={carruselFit} />
             <h3 className="text-center bbh-sans-bartle-regular text-white">Kumara K-552</h3>
           </Link>
         </div>
         <div className="carousel-item">
           <Link to="/producto/3">
-            <img src="src\assets\images\610-removebg-preview.png" className="d-block w-100" alt="" style={carruselFit} />
+            <img src="src\assets\images\610-removebg-preview.png" className="d-block w-100 img-hover-zoom" alt="" style={carruselFit} />
             <h3 className="text-center bbh-sans-bartle-regular text-white">Razer Cobra Pro HyperSpeed</h3>
           </Link>
         </div>

@@ -10,6 +10,7 @@ const Header = () => {
         <nav className="navbar navbar-expand-lg custom_nav-container">
           <Link className="navbar-brand" to="/">
             <span>Level Up</span>
+
           </Link>
 
           <button
@@ -41,6 +42,7 @@ const Header = () => {
                   Nosotros
                 </Link>
               </li>
+
             </ul>
 
             <div className="user_option d-flex align-items-center gap-3">

@@ -32,7 +32,7 @@ export default function Login() {
     <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
       <div className="card shadow-sm" style={{ maxWidth: 420, width: '100%' }}>
         <div className="card-body p-4 text-center">
-          <h2 className="mb-3" style={{ color: '#00ffea', textShadow: '0 0 8px #00ffea' }}>Bienvenido Gamer</h2>
+          <h2 className="mb-3">Bienvenido Gamer</h2>
 
           <form onSubmit={onSubmit} className="mb-3">
             <div className="mb-3 text-start">
@@ -72,11 +72,11 @@ export default function Login() {
             </Link>
           </form>
 
-          <p className="mb-1 text-muted" style={{ color: '#00ffea' }}>
-            ¿Olvidaste tu contraseña? <a href="#" className="text-decoration-underline" style={{ color: '#00ffea' }}>Recupérala aquí</a>
+          <p className="mb-1 text-muted" >
+            ¿Olvidaste tu contraseña? <a href="#" className="text-decoration-underline" >Recupérala aquí</a>
           </p>
-          <p className="mb-0" style={{ color: '#00ffea' }}>
-            ¿No tienes cuenta? <Link to="/book" className="text-decoration-underline" style={{ color: '#00ffea' }}>Regístrate aquí</Link>
+          <p className="mb-0" >
+            ¿No tienes cuenta? <Link to="/registro" className="text-decoration-underline" >Regístrate aquí</Link>
           </p>
         </div>
       </div>

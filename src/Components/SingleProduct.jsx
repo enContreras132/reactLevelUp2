@@ -35,15 +35,7 @@ function SingleProduct() {
   return (
     <div className="container py-4 mb-5">
       <div className="row g-4">
-        <div className="col-12">
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb mb-2">
-              <li className="text-whitebreadcrumb-item active" aria-current="page">
-                {product.nombre}
-              </li>
-            </ol>
-          </nav>
-        </div>
+        
 
         <div className="col-12 col-md-5">
           <div className="card shadow-sm h-100">

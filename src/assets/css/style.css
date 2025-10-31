@@ -5,6 +5,15 @@ body {
   overflow-x: hidden;
 }
 
+ /* hover imagen*/ 
+.img-hover-zoom {
+    transition: transform 0.3s ease;
+  }
+
+  .img-hover-zoom:hover {
+    transform: scale(1.1);
+  }
+
 .layout_padding {
   padding: 90px 0;
 }

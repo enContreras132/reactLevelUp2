@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormValidation } from '../utils/useFormValidation.js';
 
 function Registro() {
+    const navigate = useNavigate();
     const {
         formData,
         errors,
@@ -35,7 +37,8 @@ function Registro() {
         <>
             {/* book section */}
             <section className="book_section layout_padding">
-                <div className="container">
+                <div className="container position-relative">
+
                     <div className="heading_container text_center">
                         <h2 style={{color: 'white'}}>
                             Registrate para ordenar
