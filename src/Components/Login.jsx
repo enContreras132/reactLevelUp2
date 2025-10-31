@@ -21,7 +21,6 @@ export default function Login() {
       setError('Usuario o contraseña incorrectos.');
       return;
     }
-    // Guardar session mínima y redirigir
     try {
       localStorage.setItem('user', JSON.stringify({ id: user.id, nombre: user.nombre, rol: user.rol }));
     } catch {}
@@ -29,18 +28,18 @@ export default function Login() {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
-      <div className="card shadow-sm" style={{ maxWidth: 420, width: '100%' }}>
-        <div className="card-body p-4 text-center">
-          <h2 className="mb-3">Bienvenido Gamer</h2>
+    <div className="login-page">
+      <div className="card login-card">
+        <div className="card-body p-4">
+          <h2 className="mb-3 text-center login-title">Bienvenido Gamer</h2>
 
           <form onSubmit={onSubmit} className="mb-3">
             <div className="mb-3 text-start">
-              <label htmlFor="identifier" className="form-label">Usuario o correo</label>
+              <label htmlFor="identifier" className="form-label custom">Usuario o correo</label>
               <input
                 id="identifier"
                 type="text"
-                className="form-control"
+                className="form-control login-input"
                 placeholder="Nombre de usuario o email"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
@@ -49,11 +48,11 @@ export default function Login() {
             </div>
 
             <div className="mb-3 text-start">
-              <label htmlFor="password" className="form-label">Contraseña</label>
+              <label htmlFor="password" className="form-label custom">Contraseña</label>
               <input
                 id="password"
                 type="password"
-                className="form-control"
+                className="form-control login-input"
                 placeholder="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -63,21 +62,23 @@ export default function Login() {
 
             {error && <div className="alert alert-danger py-2">{error}</div>}
 
-            <button type="submit" className="btn btn-primary w-100 mb-2" style={{ backgroundColor: '#00aaff', borderColor: '#00aaff' }}>
+            <button type="submit" className="btn btn-primary w-100 mb-2 btn-primary-custom">
               Iniciar Sesión
             </button>
 
-            <Link to="/" className="btn btn-outline-secondary w-100">
+            <Link to="/" className="btn w-100 btn-outline-light-custom">
               Página Principal
             </Link>
           </form>
 
-          <p className="mb-1 text-muted" >
-            ¿Olvidaste tu contraseña? <a href="#" className="text-decoration-underline" >Recupérala aquí</a>
-          </p>
-          <p className="mb-0" >
-            ¿No tienes cuenta? <Link to="/registro" className="text-decoration-underline" >Regístrate aquí</Link>
-          </p>
+          <div className="d-flex justify-content-between small" style={{ color: '#cfeff6' }}>
+            <div>
+              ¿Olvidaste tu contraseña? <a href="#" className="text-decoration-underline link-accent">Recupérala</a>
+            </div>
+            <div>
+              ¿No tienes cuenta? <Link to="/registro" className="text-decoration-underline link-accent">Regístrate</Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
