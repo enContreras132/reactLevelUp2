@@ -8,7 +8,7 @@ describe('Validación de correo', () => {
   it('debe validar correos válidos', () => {
     expect(esCorreoValido('usuario@email.com')).toBe(true);
     expect(esCorreoValido('test.user@dominio.cl')).toBe(true);
-    expect(esCorreoValido('a@b.co')).toBe(true);
+    expect(esCorreoValido('a@duocuc.cl')).toBe(true);
   });
 
   it('debe rechazar correos inválidos', () => {
