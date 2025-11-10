@@ -3,7 +3,8 @@
 export const usuarios = [
   { id: 1, nombre: 'adminadmin', email: 'admin@levelup.com', pass: 'admin123', rol: 'admin' },
   { id: 2, nombre: 'Enzo', email: 'enzo123@gmail.com', pass: 'enzo123', rol: 'cliente' },
-  { id: 3, nombre: 'Maximiliano', email: 'maximiliano123@gmail.com', pass: 'maxi123', rol: 'cliente' }
+  { id: 3, nombre: 'Maximiliano', email: 'maximiliano123@gmail.com', pass: 'maxi123', rol: 'cliente' },
+  { id: 4, nombre: 'Fabian', email: 'fabian123@duocuc.cl', pass: 'fabian123', rol: 'cliente' }
 ];
 
 //  PRODUCTOS GAMERS no reales
@@ -29,7 +30,7 @@ const productosData = [
         nombre: "Audifonos Gamer Monster",
         categoria: "Audífonos",
         marca: "Monster",
-        precio: 5990,
+        precio: 8000,
         stock: 35,
         inalambrico: "No",
         color: "Negro",
@@ -43,7 +44,7 @@ const productosData = [
         id: 3,
         nombre: "Mouse Razer Cobra Pro HyperSpeed",
         marca: "Razer",
-        precio: 124640,
+        precio: 124990,
         stock: 15,
         inalambrico: "Sí",
         color: "Negro",
@@ -59,7 +60,7 @@ const productosData = [
         nombre: "Gamer Nitro V15 RTX 2050",
         categoria: "Notebook",
         marca: "Acer",
-        precio: 699990,
+        precio: 549990,
         stock: 10,
         procesador: "Intel Core i5-12500H",
         ram: "16GB",
@@ -75,7 +76,7 @@ const productosData = [
         nombre: "Teclado Gamer Redragon Kumara",
         categoria: "Teclado",
         marca: "Redragon",
-        precio: 49990,
+        precio: 35990,
         stock: 40,
         inalambrico: "No",
         color: "Negro",
@@ -128,7 +129,7 @@ const productosData = [
         nombre: "Teclado Mecanico Gamer RK Royal Kludge R65",
         categoria: "Teclado",
         marca: "Royal Kludge",
-        precio: 69990,
+        precio: 57990,
         stock: 20,
         inalambrico: "Si",
         color: "Negro", 
@@ -141,11 +142,3 @@ const productosData = [
 // Exportación nueva para usar en componentes
 export const productos = productosData;
 
-// PEDIDOS DE CLIENTES DE EJEMPLO
-// Tabla pedidos falsa en panel de admin.
-export const pedidos = [
-  { id: 2024001, cliente: 'Bastian Muñoz', fecha: '2025-10-12', estado: 'Procesando', total: 129990 },
-  { id: 2024002, cliente: 'Javiera Gonzalez', fecha: '2025-10-11', estado: 'Enviado', total: 1949980 },
-  { id: 2024003, cliente: 'Matias Rojas', fecha: '2025-10-12', estado: 'Pendiente', total: 49990 },
-  { id: 2024004, cliente: 'Carla Nuñez', fecha: '2025-10-10', estado: 'Entregado', total: 649990 }
-];

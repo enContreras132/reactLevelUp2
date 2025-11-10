@@ -105,14 +105,14 @@ const Header = () => {
                     <span>{user.nombre}</span>
                   </a>
                   <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                      {user.rol === 'admin' ? (
-                        <Link className="dropdown-item" to="/admin">Panel Admin</Link>
-                      ) : (
-                        <Link className="dropdown-item" to="/perfil">Mi cuenta</Link>
-                      )}
-                    </li>
-                    <li><hr className="dropdown-divider" /></li>
+                    {user.rol === 'admin' && (
+                      <>
+                        <li>
+                          <Link className="dropdown-item" to="/admin">Panel Admin</Link>
+                        </li>
+                        <li><hr className="dropdown-divider" /></li>
+                      </>
+                    )}
                     <li><button className="dropdown-item" onClick={handleLogout}>Cerrar sesión</button></li>
                   </ul>
                 </div>
