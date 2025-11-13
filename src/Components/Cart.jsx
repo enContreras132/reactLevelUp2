@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 export default function Cart() {
-  const { items, updateQty, removeItem, clear, total, count } = useCart();
+  const { items, updateCantidad, removeItem, clear, total, count } = useCart();
 
   if (!items || items.length === 0) {
     return (
@@ -63,7 +63,7 @@ export default function Cart() {
                           <button
                             className="btn btn-outline-light"
                             type="button"
-                            onClick={() => updateQty(it.id, Math.max(1, (it.qty || 1) - 1))}
+                            onClick={() => updateCantidad(it.id, Math.max(1, (it.cantidad || 1) - 1))}
                           >
                             −
                           </button>
@@ -76,7 +76,7 @@ export default function Cart() {
                           <button
                             className="btn btn-outline-light"
                             type="button"
-                            onClick={() => updateQty(it.id, (it.qty || 1) + 1)}
+                            onClick={() => updateCantidad(it.id, (it.cantidad || 1) + 1)}
                           >
                             +
                           </button>

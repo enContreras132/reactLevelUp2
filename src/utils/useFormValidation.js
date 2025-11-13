@@ -95,7 +95,7 @@ export function useFormValidation(initialValues) {
 
     const getFieldClass = (fieldName) => {
         if (!touched[fieldName]) return 'form-controlador';
-        return errors[fieldName] ? 'form-controlador falla' : 'form-controlador bien';
+        return errors[fieldName] ? 'form-controlador is-invalid' : 'form-control is-valid';
     };
 
     const resetForm = () => {

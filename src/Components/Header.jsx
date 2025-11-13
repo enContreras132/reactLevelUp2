@@ -49,7 +49,6 @@ const Header = () => {
     <header className="header_section">
       <div className="container">
         <nav className="navbar navbar-expand-lg custom_nav-container">
-          {/* Brand: logo a la izquierda, texto a la derecha (logo más grande) */}
           <Link className="navbar-brand d-flex align-items-center" to="/">
             <img
               src={Logo}

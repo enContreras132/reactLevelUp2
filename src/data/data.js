@@ -137,8 +137,41 @@ const productosData = [
         switch: "Mechanical RK Blue",
         imagen: "https://www.chilegatillos.cl/cdn/shop/files/TecladoRKRoyalKludgeR65chilegatillos.cl.jpg?v=1717042966&width=2048",
         descripcion: "Diseñado para gamers y creadores que buscan control total y rendimiento insuperable. Ideal para aficionados, semiprofesionales y profesionales.",
+    },
+    {
+        id: 10,
+        nombre: "Teclado Mecanico Gamer RK Royal Kludge R65",
+        categoria: "Teclado",
+        marca: "Royal Kludge",
+        precio: 57990,
+        stock: 20,
+        inalambrico: "Si",
+        color: "Negro", 
+        dimension: "65%",
+        switch: "Mechanical RK Blue",
+        imagen: "https://www.chilegatillos.cl/cdn/shop/files/TecladoRKRoyalKludgeR65chilegatillos.cl.jpg?v=1717042966&width=2048",
+        descripcion: "Diseñado para gamers y creadores que buscan control total y rendimiento insuperable. Ideal para aficionados, semiprofesionales y profesionales.",
     }
 ];
 // Exportación nueva para usar en componentes
 export const productos = productosData;
 
+
+export const region = [
+  {"id": 1, nombre: "Arica y Parinacota"},
+  {"id": 2, nombre: "Tarapacá"},
+  {"id": 3, nombre: "Antofagasta"},
+  {"id": 4, nombre: "Atacama"},
+  {"id": 5, nombre: "Coquimbo"},
+  {"id": 6, nombre: "Valparaíso"},
+  {"id": 7, nombre: "Metropolitana de Santiago"},
+  {"id": 8, nombre: "Libertador General Bernardo O'Higgins"},
+  {"id": 9, nombre: "Maule"},
+  {"id": 10, nombre: "Ñuble"},
+  {"id": 11, nombre: "Biobío"},
+  {"id": 12, nombre: "La Araucanía"},
+  {"id": 13, nombre: "Los Ríos"},
+  {"id": 14, nombre: "Los Lagos"},
+  {"id": 15, nombre: "Aysén del General Carlos Ibáñez del Campo"},
+  {"id": 16, nombre: "Magallanes y de la Antártica Chilena"}
+];

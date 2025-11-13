@@ -1,8 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormValidation } from '../utils/useFormValidation.js';
+import { useState } from 'react';
+import { region as regiones } from '../data/data.js';
 
 function Registro() {
+    // Región seleccionada por el usuario
+    const [selectedRegion, setSelectedRegion] = useState("");
     const navigate = useNavigate();
     const {
         formData,
@@ -30,6 +34,7 @@ function Registro() {
                 id: `cli-${Date.now()}`,
                 nombre: formData.nombre,
                 email: formData.mail,
+                region: selectedRegion || undefined,
                 rol: 'cliente',
             };
             try {
@@ -122,6 +127,22 @@ function Registro() {
                                             onBlur={handleBlur}
                                         />
                                         {touched.nacimiento && errors.nacimiento && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.nacimiento}</p>}
+                                    </div>
+                                    {/* Región (dropdown) */}
+                                    <div className="mb-3">
+                                        <label htmlFor="region" style={{color: 'white'}}>Región</label>
+                                        <select
+                                            id="region"
+                                            name="region"
+                                            className="form-select"
+                                            value={selectedRegion}
+                                            onChange={(e) => setSelectedRegion(e.target.value)}
+                                        >
+                                            <option value="">Selecciona una región</option>
+                                            {Array.isArray(regiones) && regiones.map((r) => (
+                                                <option key={r.id} value={r.nombre}>{r.nombre}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div className={getFieldClass('direccion')}>
                                         <label htmlFor="direccion" style={{color: 'white'}}>Dirección</label>
