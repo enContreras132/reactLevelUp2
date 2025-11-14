@@ -2,11 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormValidation } from '../utils/useFormValidation.js';
 import { useState } from 'react';
-import { region as regiones } from '../data/data.js';
+import {region} from '../data/data.js';
 
 function Registro() {
-    // Región seleccionada por el usuario
-    const [selectedRegion, setSelectedRegion] = useState("");
+    const [region, setRegion] = useState("");
     const navigate = useNavigate();
     const {
         formData,
@@ -34,7 +33,6 @@ function Registro() {
                 id: `cli-${Date.now()}`,
                 nombre: formData.nombre,
                 email: formData.mail,
-                region: selectedRegion || undefined,
                 rol: 'cliente',
             };
             try {
@@ -72,8 +70,8 @@ function Registro() {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
-                                        {touched.nombre && errors.nombre && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.nombre}</p>}
-                                    </div>
+                                        {touched.nombre && errors.nombre && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.nombre}</div>)}                                       </div>
                                     <div className={getFieldClass('telefono')}>
                                         <label htmlFor="telefono" style={{color: 'white'}}>Numero de telefono</label>
                                         <input 
@@ -86,8 +84,8 @@ function Registro() {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
-                                        {touched.telefono && errors.telefono && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.telefono}</p>}
-                                    </div>
+                                        {touched.telefono && errors.telefono && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.telefono}</div>)}                                       </div>
                                     <div className={getFieldClass('mail')}>
                                         <label htmlFor="mail" style={{color: 'white'}}>Email</label>
                                         <input 
@@ -99,8 +97,8 @@ function Registro() {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
-                                        {touched.mail && errors.mail && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.mail}</p>}
-                                    </div>
+                                        {touched.mail && errors.mail && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.mail}</div>)}                                       </div>
                                     <div className={getFieldClass('rut')}>
                                         <label htmlFor="rut" style={{color: 'white'}}>Rut (12345678-9)</label>
                                         <input 
@@ -113,8 +111,8 @@ function Registro() {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
-                                        {touched.rut && errors.rut && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.rut}</p>}
-                                    </div>
+                                        {touched.rut && errors.rut && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.rut}</div>)}                                       </div>
                                     <div className={getFieldClass('nacimiento')}>
                                         <label htmlFor="nacimiento" style={{color: 'white'}}>Fecha de nacimiento</label>
                                         <input 
@@ -126,26 +124,10 @@ function Registro() {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
-                                        {touched.nacimiento && errors.nacimiento && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.nacimiento}</p>}
-                                    </div>
-                                    {/* Región (dropdown) */}
-                                    <div className="mb-3">
-                                        <label htmlFor="region" style={{color: 'white'}}>Región</label>
-                                        <select
-                                            id="region"
-                                            name="region"
-                                            className="form-select"
-                                            value={selectedRegion}
-                                            onChange={(e) => setSelectedRegion(e.target.value)}
-                                        >
-                                            <option value="">Selecciona una región</option>
-                                            {Array.isArray(regiones) && regiones.map((r) => (
-                                                <option key={r.id} value={r.nombre}>{r.nombre}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                        {touched.direccion && errors.direccion && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.direccion}</div>)}                                       </div>
                                     <div className={getFieldClass('direccion')}>
-                                        <label htmlFor="direccion" style={{color: 'white'}}>Dirección</label>
+                                        <label htmlFor="direccion" style={{color: 'white'}}>Region</label>
                                         <input 
                                             id="direccion" 
                                             name="direccion"
@@ -155,14 +137,16 @@ function Registro() {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
-                                        {touched.direccion && errors.direccion && <p style={{color: 'white', backgroundColor: 'black'}}>{errors.direccion}</p>}
-                                    </div>
-                                    <div className="btn_box">
+                                        {touched.direccion && errors.direccion && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.direccion}</div>)}                                    </div>
+                                        <div className="btn_box">
                                         <button type="submit">
                                             Registrarme
                                         </button>
                                     </div>
+                                    
                                 </form>
+                                
                             </div>
                         </div>
                     </div>

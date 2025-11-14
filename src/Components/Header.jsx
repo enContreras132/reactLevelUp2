@@ -49,13 +49,15 @@ const Header = () => {
     <header className="header_section">
       <div className="container">
         <nav className="navbar navbar-expand-lg custom_nav-container">
-          <Link className="navbar-brand d-flex align-items-center" to="/">
+          <Link className="navbar-brand d-flex align-items-center flex-nowrap" to="/">
             <img
               src={Logo}
               alt="Level Up Logo"
-              style={{ height: 100, width: 'auto', objectFit: 'contain', marginRight: 15 }}
+              className="img-fluid d-inline-block align-top"
+              style={{ maxHeight: 60, width: 'auto', marginRight: 12 }}
             />
-            <span className="fw-bold">Level Up</span>
+            {/* Hide brand text on very small screens to save space */}
+            <span className="fw-bold d-none d-sm-inline">Level Up</span>
           </Link>
 
           <button
@@ -89,7 +91,8 @@ const Header = () => {
               </li>
             </ul>
 
-            <div className="user_option d-flex align-items-center gap-3">
+            {/* center user/cart/search on small screens, align right on >=992px */}
+            <div className="user_option d-flex align-items-center gap-3 justify-content-center ms-lg-auto">
               {user ? (
                 <div className="nav-item dropdown">
                   <a

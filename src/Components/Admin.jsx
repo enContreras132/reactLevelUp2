@@ -324,39 +324,7 @@ export default function Admin() {
     );
   }
 
-  function renderPedidos() {
-    return (
-      <div>
-        <h2 className="mb-3">Pedidos</h2>
-        <div className="table-responsive">
-          <table className="table table-hover table-dark">
-            <thead>
-              <tr>
-                <th>ID Pedido</th>
-                <th>Cliente</th>
-                <th>Estado</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pedidos.map((p) => (
-                <tr key={p.id}>
-                  <td>#{p.id}</td>
-                  <td>{p.cliente}</td>
-                  <td>
-                    <span className="badge" style={{ backgroundColor: '#00ffea', color: '#212529' }}>
-                      {p.estado}
-                    </span>
-                  </td>
-                  <td>${(p.total ?? 0).toLocaleString('es-CL')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  }
+  // pedidos view removed — table intentionally omitted
 
   function renderUsuarios() {
     return (
@@ -422,13 +390,7 @@ export default function Admin() {
             </li>
           )}
 
-          {(rol === 'admin' || rol === 'pedidos') && (
-            <li>
-              <a href="#pedidos" className={`nav-link ${view === 'pedidos' ? 'active' : 'text-white'}`} onClick={(e) => { e.preventDefault(); setView('pedidos'); }}>
-                <i className="bi bi-receipt me-2"></i> Pedidos
-              </a>
-            </li>
-          )}
+          {/* Pedidos removed from sidebar per request */}
 
           {rol === 'admin' && (
             <li>
@@ -456,16 +418,12 @@ export default function Admin() {
 
       <main id="main-content" className="flex-grow-1 p-4" style={{ minHeight: '100vh', background: '#071021' }}>
         <h1 id="content-title" className="text-light mb-3">
-          {view === 'dashboard' ? 'Dashboard' : 
-           view === 'productos' ? 'Gestión de Productos' : 
-           view === 'pedidos' ? 'Gestión de Pedidos' : 
-           'Gestión de Usuarios'}
+          {view === 'dashboard' ? 'Dashboard' : view === 'productos' ? 'Gestión de Productos' : 'Gestión de Usuarios'}
         </h1>
 
         <div id="content-area" className="text-light">
           {view === 'dashboard' && renderDashboard()}
           {view === 'productos' && renderProductos()}
-          {view === 'pedidos' && renderPedidos()}
           {view === 'usuarios' && renderUsuarios()}
         </div>
       </main>

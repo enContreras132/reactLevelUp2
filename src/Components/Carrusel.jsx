@@ -25,7 +25,7 @@ const Carrusel = () => {
       <div className="carousel-inner mb-5">
         <div className="carousel-item active">
           <Link to="/producto/6">
-            <img src="https://p4-ofp.static.pub//fes/cms/2025/05/22/bbh4okj51q0s8dnrsp89vypi3l1nmz317151.png" className="d-block w-100 img-hover-zoom" alt="" style={carruselFit} />
+            <img src="https://p4-ofp.static.pub//fes/cms/2025/05/22/bbh4okj51q0s8dnrsp89vypi3l1nmz317151.png" className="d-block w-100 img-hover-zoom" alt="Legion M600" style={carruselFit} />
             <h3 className="text-center bbh-sans-bartle-regular text-white">Legion M600</h3>
           </Link>
         </div>
