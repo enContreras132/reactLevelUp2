@@ -1,22 +1,48 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { productos as baseProductos } from '../data/data';
+import axios from 'axios';
 import { useCart } from '../context/CartContext';
 
 export default function Productos() {
   const { addItem } = useCart();
   const [categoria, setCategoria] = useState("todos");
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Mezclar productos base con los agregados por trabajador desde localStorage
-  const productos = useMemo(() => {
-    try {
-      const raw = localStorage.getItem('customProductos');
-      const custom = raw ? JSON.parse(raw) : [];
-      return [...baseProductos, ...custom];
-    } catch {
-      return [...baseProductos];
-    }
+  useEffect(() => {
+    cargarProductos();
   }, []);
+
+  const cargarProductos = async () => {
+    try {
+      setLoading(true);
+      
+      // Llamadas paralelas a todas las APIs
+      const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
+        axios.get('http://localhost:8080/audifono').catch(() => ({ data: [] })),
+        axios.get('http://localhost:8080/mouse').catch(() => ({ data: [] })),
+        axios.get('http://localhost:8080/teclado').catch(() => ({ data: [] })),
+        axios.get('http://localhost:8080/notebook').catch(() => ({ data: [] }))
+      ]);
+
+      // Combinar todos los productos
+      const todosProductos = [
+        ...audifonosRes.data,
+        ...mouseRes.data,
+        ...tecladosRes.data,
+        ...notebooksRes.data
+      ];
+
+      setProductos(todosProductos);
+      setError(null);
+    } catch (err) {
+      console.error('Error al cargar productos:', err);
+      setError('Error al cargar productos desde el servidor');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Obtener categorías únicas de los productos
   const categorias = ["todos", ...new Set(productos.map(p => p.categoria).filter(Boolean))];
@@ -25,6 +51,39 @@ export default function Productos() {
   const productosFiltrados = categoria === "todos" 
     ? productos 
     : productos.filter(p => p.categoria === categoria);
+
+  if (loading) {
+    return (
+      <section className="food_section layout_padding-bottom">
+        <div className="container">
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+            <p className="mt-3">Cargando productos...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="food_section layout_padding-bottom">
+        <div className="container">
+          <div className="alert alert-danger" role="alert">
+            {error}
+            <button 
+              className="btn btn-primary ms-3" 
+              onClick={cargarProductos}
+            >
+              Reintentar
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="food_section layout_padding-bottom">
@@ -53,8 +112,12 @@ export default function Productos() {
                 <div className="box w-100 d-flex flex-column">
                   <div className="img-box">
                     <img
-                      src={p.imagen || 'https://via.placeholder.com/400x300?text=Sin+imagen'}
+                      src={p.imagen || p.urlImagen || 'https://via.placeholder.com/400x300?text=Sin+imagen'}
                       alt={p.nombre}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/400x300?text=Sin+imagen';
+                      }}
                     />
                   </div>
                   <div className="detail-box flex-grow-1 d-flex flex-column">

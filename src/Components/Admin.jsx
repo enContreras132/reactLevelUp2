@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as data from '../data/data';
+import Soloaudifonos from './Soloaudifonos';
+import Solomouse from './Solomouse'
+import Soloteclado from './Soloteclado'
+import Solonotebook from './Solonotebook'
 
 // compatibilidad con distintos nombres de export en data.js
 const productos = data.productosData ?? data.productos ?? [];
@@ -69,15 +73,15 @@ export default function Admin() {
 
   function renderProductos() {
     // Obtener categorías únicas
-    const categorias = [...new Set(productos.map(p => p.categoria).filter(Boolean))];
+    const categorias = ['Audífono', 'Mouse', 'Teclado', 'Notebook'];
     
     // Campos base comunes para todos los productos
-    const camposBase = ['nombre', 'categoria', 'marca', 'precio', 'stock', 'imagen', 'descripcion'];
+    const camposBase = ['nombre', 'categoria', 'marca', 'precio', 'stock', 'descripcion', 'urlImagen'];
     
-    // Campos específicos por categoría (basados en los productos existentes)
+    // Campos específicos por categoría
     const camposPorCategoria = {
-      'Mouse': ['inalambrico', 'color', 'botonesCanti', 'dpi', 'dpiMin', 'dpiMax'],
-      'Audífonos': ['inalambrico', 'color', 'tipo', 'frecuenciaRespuesta', 'botonesCanti'],
+      'Mouse': ['inalambrico', 'color', 'botonesCant', 'dpi', 'dpiMin', 'dpiMax'],
+      'Audífono': ['inalambrico', 'color', 'botonesCant'],
       'Notebook': ['procesador', 'ram', 'memoria', 'pantalla', 'tarjetaGrafica'],
       'Teclado': ['inalambrico', 'color', 'dimension', 'switch']
     };
@@ -91,8 +95,8 @@ export default function Admin() {
         marca: '',
         precio: '',
         stock: '',
-        imagen: '',
-        descripcion: ''
+        descripcion: '',
+        urlImagen: ''
       };
       
       // Agregar campos específicos de la categoría
@@ -118,17 +122,9 @@ export default function Admin() {
         return;
       }
 
-      // Generar nuevo ID
-      const maxId = Math.max(...productos.map(p => p.id), 0);
-      const productoFinal = {
-        ...newProduct,
-        id: maxId + 1,
-        precio: Number(newProduct.precio),
-        stock: Number(newProduct.stock)
-      };
-
-      console.log('Nuevo producto:', productoFinal);
-      alert('Producto agregado correctamente');
+      // TODO: Aquí irá la llamada a la API para crear el producto
+      console.log('Nuevo producto a enviar:', newProduct);
+      alert('Producto agregado correctamente (pendiente: integración con API)');
       
       // Resetear formulario
       setShowAddForm(false);
@@ -143,16 +139,14 @@ export default function Admin() {
         marca: 'Marca',
         precio: 'Precio *',
         stock: 'Stock *',
-        imagen: 'URL Imagen',
+        urlImagen: 'URL Imagen',
         descripcion: 'Descripción',
         inalambrico: 'Inalámbrico',
         color: 'Color',
-        botonesCanti: 'Cantidad de botones',
+        botonesCant: 'Cantidad de botones',
         dpi: 'DPI',
         dpiMin: 'DPI Mínimo',
         dpiMax: 'DPI Máximo',
-        tipo: 'Tipo',
-        frecuenciaRespuesta: 'Frecuencia de respuesta',
         procesador: 'Procesador',
         ram: 'RAM',
         memoria: 'Memoria',
@@ -162,7 +156,7 @@ export default function Admin() {
         switch: 'Switch'
       };
 
-      const tipoInput = ['precio', 'stock', 'botonesCanti', 'dpi', 'dpiMin', 'dpiMax'].includes(campo) 
+      const tipoInput = ['precio', 'stock', 'botonesCant', 'dpi', 'dpiMin', 'dpiMax'].includes(campo) 
         ? 'number' 
         : 'text';
 
@@ -216,8 +210,7 @@ export default function Admin() {
 
     return (
       <div>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2 className="mb-0">Productos</h2>
+        <div className="d-flex justify-content-between align-items-center mb-4">
           <button 
             className="btn btn-success"
             onClick={() => setShowAddForm(!showAddForm)}
@@ -294,32 +287,11 @@ export default function Admin() {
           </div>
         )}
 
-        <div className="table-responsive">
-          <table className="table table-hover table-dark">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Stock</th>
-                <th>Precio</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productos.map((p) => (
-                <tr key={p.id}>
-                  <td>{p.id}</td>
-                  <td>{p.nombre}</td>
-                  <td>
-                    <span className={`badge ${p.stock < 10 ? 'bg-danger' : 'bg-success'}`}>
-                      {p.stock ?? '—'}
-                    </span>
-                  </td>
-                  <td>${(p.precio ?? 0).toLocaleString('es-CL')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {/* Tablas de productos por categoría */}
+        <Soloaudifonos />
+        <Solomouse/>
+        <Soloteclado/>
+        <Solonotebook/>
       </div>
     );
   }

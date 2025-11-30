@@ -22,8 +22,7 @@ const productosData = [
         botonesCanti: 6,
         dpi: 3200,
         descripcion: "Mouse Gamer Monster RGB Wired. Diseño ergonómico con iluminación RGB personalizable y 6 botones programables.",
-        imagen: "https://i.bolder.run/r/czozMjIxLGc6NjkweA/477efa0d/711248-Mouse_B1.png",
-
+        imagen: "https://i.bolder.run/r/czozMjIxLGc6NjkweA/477efa0d/711248-Mouse_B1.png"
     },
     {
         id: 2,
@@ -37,7 +36,7 @@ const productosData = [
         tipo: "Headset",
         frecuenciaRespuesta: "20Hz-20kHz",
         imagen: "https://i.bolder.run/r/czozMjIxLGc6NjkweA/424c2d92/710300-1_%283%29.png",
-        descripcion: "Audífonos Gamer Monster Loud 550BK. Formato Headset, con micrófono, compatible con Ps4 / Nswitch / X-one.",
+        descripcion: "Audífonos Gamer Monster Loud 550BK. Formato Headset, con micrófono, compatible con Ps4 / Nswitch / X-one."
 
     },
     {
@@ -126,20 +125,6 @@ const productosData = [
     },
     {
         id: 9,
-        nombre: "Teclado Mecanico Gamer RK Royal Kludge R65",
-        categoria: "Teclado",
-        marca: "Royal Kludge",
-        precio: 57990,
-        stock: 20,
-        inalambrico: "Si",
-        color: "Negro", 
-        dimension: "65%",
-        switch: "Mechanical RK Blue",
-        imagen: "https://www.chilegatillos.cl/cdn/shop/files/TecladoRKRoyalKludgeR65chilegatillos.cl.jpg?v=1717042966&width=2048",
-        descripcion: "Diseñado para gamers y creadores que buscan control total y rendimiento insuperable. Ideal para aficionados, semiprofesionales y profesionales.",
-    },
-    {
-        id: 10,
         nombre: "Teclado Mecanico Gamer RK Royal Kludge R65",
         categoria: "Teclado",
         marca: "Royal Kludge",
