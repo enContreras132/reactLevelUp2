@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { usuarios } from '../data/data';
 import { useFormValidation } from '../utils/useFormValidation.js';
+import api from '../api/axiosConfig'; 
 
-// Componente de Login para autenticación de usuarios
 export default function Login() {
   const navigate = useNavigate();
   const {
@@ -13,8 +12,7 @@ export default function Login() {
     handleChange,
     handleBlur,
     validateAllFields,
-    getFieldClass,
-    resetForm
+    getFieldClass
   } = useFormValidation({
     identifier: '',
     password: ''
@@ -22,39 +20,49 @@ export default function Login() {
   const [error, setError] = React.useState('');
 
   // Maneja el envío del formulario de login
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => { 
     e.preventDefault();
     setError('');
+
     // Validación de campos vacíos
     if (!validateAllFields()) {
       return;
     }
-    // Busca el usuario por email o nombre y contraseña
-    const user = usuarios.find(
-      (u) =>
-        (u.email?.toLowerCase() === formData.identifier.toLowerCase() ||
-          u.nombre?.toLowerCase() === formData.identifier.toLowerCase()) &&
-        u.pass === formData.password
-    );
-    if (!user) {
-      setError('Usuario o contraseña incorrectos.');
-      return;
-    }
-    // Guardar en localStorage y sessionStorage para compatibilidad y persistencia
-    const payload = { id: user.id, nombre: user.nombre, rol: user.rol };
+
     try {
-      localStorage.setItem('user', JSON.stringify(payload));
-      sessionStorage.setItem('currentUser', JSON.stringify(payload));
+      
+      
+      
+      // Mapeamos 'identifier' a 'username' porque así lo pide el backend Java
+      const response = await api.post('/login', {
+          username: formData.identifier, 
+          password: formData.password
+      });
+
+      // 4. Si Java dice OK, guardamos el token
+      const token = response.data.token;
+      console.log("Login exitoso, token:", token);
+
+      // 5. Guardamos el token REAL
+      localStorage.setItem('token', token);
+
+      // (OPCIONAL) Simulamos los datos del usuario para mantener tu lógica de roles
+      // Ya que por ahora el backend solo devuelve el token.
+      const userPayload = { 
+        nombre: formData.identifier, 
+        rol: 'admin' 
+      };
+      
+      localStorage.setItem('user', JSON.stringify(userPayload));
+
+      // 6. Redirigimos
+      // Como sabemos que el usuario de Java es admin, lo mandamos al admin panel
+      navigate('/admin', { replace: true });
+
     } catch (err) {
-      console.error('storage error', err);
-    }
-    // Redirigir según rol
-    if (user.rol === 'admin') {
-      navigate('/admin', { replace: true });
-    } else if (user.rol === 'trabajador') {
-      navigate('/admin', { replace: true });
-    } else {
-      navigate('/checkout', { replace: true });
+      console.error("Error de login:", err);
+      // Si falla, mostramos mensaje de error
+      setError('Usuario o contraseña incorrectos (Verifica tu API).');
     }
   };
 
@@ -66,13 +74,13 @@ export default function Login() {
 
           <form onSubmit={onSubmit} className="mb-3">
             <div className={getFieldClass('identifier') + ' mb-3 text-start'}>
-              <label htmlFor="identifier" className="form-label custom">Usuario o correo</label>
+              <label htmlFor="identifier" className="form-label custom">Usuario</label>
               <input
                 id="identifier"
                 name="identifier"
                 type="text"
                 className="form-control login-input"
-                placeholder="Nombre de usuario o email"
+                placeholder="Ej: admin"
                 value={formData.identifier}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -89,7 +97,7 @@ export default function Login() {
                 name="password"
                 type="password"
                 className="form-control login-input"
-                placeholder="Contraseña"
+                placeholder="Ej: 1234"
                 value={formData.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
