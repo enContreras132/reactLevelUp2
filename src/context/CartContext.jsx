@@ -3,18 +3,21 @@ import axios from 'axios';
 
 const CartContext = createContext();
 
+
+const BASE_URL = "https://levelupapi-production.up.railway.app";
+
 export function CartProvider({ children }) {
   const [productosSource, setProductosSource] = useState([]);
 
-  // Cargar productos desde la API al montar
   useEffect(() => {
     const cargarProductos = async () => {
       try {
+        
         const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
-          axios.get('http://localhost:8080/audifono').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/mouse').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/teclado').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/notebook').catch(() => ({ data: [] }))
+          axios.get(`${BASE_URL}/audifono`).catch(() => ({ data: [] })),
+          axios.get(`${BASE_URL}/mouse`).catch(() => ({ data: [] })),
+          axios.get(`${BASE_URL}/teclado`).catch(() => ({ data: [] })),
+          axios.get(`${BASE_URL}/notebook`).catch(() => ({ data: [] }))
         ]);
         const todos = [
           ...audifonosRes.data,
@@ -29,30 +32,27 @@ export function CartProvider({ children }) {
     };
     cargarProductos();
   }, []);
+
+  
   const getInitialItems = () => {
-    try {
-      // Migrar clave legacy 'carrito' a 'cart' si aún existe
+     
+     try {
       const currentRaw = localStorage.getItem('cart');
       const legacyRaw = localStorage.getItem('carrito');
       if (!currentRaw && legacyRaw) {
-        // mover datos legacy a la nueva clave y eliminar legacy
         localStorage.setItem('cart', legacyRaw);
         localStorage.removeItem('carrito');
       }
-      // Leer desde la clave canonica 'cart'
       const raw = localStorage.getItem('cart');
       const parsed = raw ? JSON.parse(raw) : [];
-      // Normalizar forma: { id, nombre, precio, imagen, cantidad }
       return parsed
         .map((it) => {
           if (!it) return null;
           const cantidad = it.cantidad ?? it.cantidad ?? it.cantidadProducto ?? 1;
           if (it.id) return { ...it, cantidad: cantidad };
-          // intentar resolver id buscando por nombre en productosData
           if (it.nombre) {
             const prod = productosSource.find((p) => p.nombre === it.nombre || String(p.id) === String(it.id));
             if (prod) return { id: prod.id, nombre: prod.nombre, precio: prod.precio, imagen: prod.imagen, cantidad: cantidad };
-            // fallback: mantener nombre como id string
             return { id: it.nombre, nombre: it.nombre, precio: it.precio ?? 0, imagen: it.imagen ?? '', cantidad: cantidad };
           }
           return null;
@@ -62,11 +62,11 @@ export function CartProvider({ children }) {
       return [];
     }
   };
+
   const [items, setItems] = useState(getInitialItems);
 
   useEffect(() => {
     try {
-      // Escribir solo en la clave canonical 'cart' (la migración ya se hizo en init)
       localStorage.setItem('cart', JSON.stringify(items));
     } catch {}
   }, [items]);
@@ -87,6 +87,7 @@ export function CartProvider({ children }) {
   const clear = () => setItems([]);
   const total = items.reduce((s, i) => s + (i.precio || 0) * (i.cantidad || 1), 0);
   const count = items.reduce((s, i) => s + (i.cantidad || 1), 0);
+  
   return (
     <CartContext.Provider value={{ items, addItem, removeItem, updateCantidad, clear, total, count }}>
       {children}
