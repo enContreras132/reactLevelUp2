@@ -1,5 +1,5 @@
 import React from 'react';
-import Cart from '../common/MyCart.js';
+import Cart from '../common/MyCart.jsx';
 
 const CartPage = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from '../common/Login.js';
+import Login from '../common/MyLogin.jsx';
 
 const LoginPage = () => {
   return (
