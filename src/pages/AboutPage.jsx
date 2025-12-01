@@ -1,5 +1,5 @@
 import React from 'react';
-import SobreNosotros from '../Components/MySobreNosotros.jsx';
+import SobreNosotros from '../common/MySobreNosotros.jsx';
 
 const AboutPage = () => {
   return (

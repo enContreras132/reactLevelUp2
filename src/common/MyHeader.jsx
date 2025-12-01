@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import SearchDropdown from "./MySearchDropdown.js";
+import SearchDropdown from "./MySearchDropdown.jsx";
 import { useCart } from '../context/CartContext.jsx';
 // He cambiado la extensión a .png según tu petición
 import Logo from '../assets/images/logolevelupmini.png';
