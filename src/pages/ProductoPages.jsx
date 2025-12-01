@@ -1,5 +1,5 @@
 import React from 'react';
-import Productos from '../common/MyProductos.js';
+import Productos from '../common/MyProductos.jsx';
 
 const ProductoPages = () => {
   return (
