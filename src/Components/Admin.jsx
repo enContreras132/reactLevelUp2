@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as data from '../data/data';
 import Soloaudifonos from './Soloaudifonos';
-import Solomouse from './Solomouse'
-import Soloteclado from './Soloteclado'
-import Solonotebook from './Solonotebook'
-
-// compatibilidad con distintos nombres de export en data.js
-const productos = data.productosData ?? data.productos ?? [];
-const pedidos = data.pedidos ?? [];
-const usuarios = data.usuarios ?? [];
+import Solomouse from './Solomouse';
+import Soloteclado from './Soloteclado';
+import Solonotebook from './Solonotebook';
+import Soloclientes from './Soloclientes';
+import Soloadmin from './Soloadmin';
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -301,37 +297,11 @@ export default function Admin() {
   function renderUsuarios() {
     return (
       <div>
-        <h2 className="mb-3">Usuarios</h2>
-        <div className="table-responsive">
-          <table className="table table-hover table-dark">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Rol</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.map((u) => (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
-                  <td>{u.nombre}</td>
-                  <td>{u.email}</td>
-                  <td>
-                    <span className={`badge ${
-                      u.rol === 'admin' ? 'bg-danger' : 
-                      u.rol === 'pedidos' ? 'bg-warning' : 
-                      'bg-info'
-                    }`}>
-                      {u.rol}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <h2 className="mb-4">Gestión de Usuarios</h2>
+        
+        {/* Tablas de usuarios por rol */}
+        <Soloadmin />
+        <Soloclientes />
       </div>
     );
   }

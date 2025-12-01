@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { useFormValidation } from '../utils/useFormValidation.js';
-import { useState } from 'react';
-import {region} from '../data/data.js';
 
 function Registro() {
-    const [region, setRegion] = useState("");
+    const [regiones, setRegiones] = useState([]);
+    const [loadingRegiones, setLoadingRegiones] = useState(true);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Cargar regiones desde la API
+        axios.get('http://localhost:8080/region')
+            .then(response => {
+                const data = Array.isArray(response.data) ? response.data : [response.data];
+                setRegiones(data);
+                setLoadingRegiones(false);
+            })
+            .catch(err => {
+                console.error('Error al cargar regiones:', err);
+                setLoadingRegiones(false);
+            });
+    }, []);
     const {
         formData,
         errors,
@@ -127,16 +141,28 @@ function Registro() {
                                         {touched.direccion && errors.direccion && (
                                         <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.direccion}</div>)}                                       </div>
                                     <div className={getFieldClass('direccion')}>
-                                        <label htmlFor="direccion" style={{color: 'white'}}>Region</label>
-                                        <input 
-                                            id="direccion" 
-                                            name="direccion"
-                                            type="text" 
-                                            className="form-control" 
-                                            value={formData.direccion}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                        />
+                                        <label htmlFor="direccion" style={{color: 'white'}}>Región</label>
+                                        {loadingRegiones ? (
+                                            <select className="form-control" disabled>
+                                                <option>Cargando regiones...</option>
+                                            </select>
+                                        ) : (
+                                            <select
+                                                id="direccion" 
+                                                name="direccion"
+                                                className="form-control"
+                                                value={formData.direccion}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                            >
+                                                <option value="">Selecciona una región</option>
+                                                {regiones.map((region) => (
+                                                    <option key={region.id} value={region.nombre}>
+                                                        {region.nombre}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
                                         {touched.direccion && errors.direccion && (
                                         <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.direccion}</div>)}                                    </div>
                                         <div className="btn_box">
