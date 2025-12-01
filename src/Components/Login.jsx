@@ -30,39 +30,59 @@ export default function Login() {
     }
 
     try {
-      
-      
-      
-      // Mapeamos 'identifier' a 'username' porque así lo pide el backend Java
-      const response = await api.post('/login', {
+      // El backend espera 'username' y 'password' (busca por correo en la BD)
+      const loginResponse = await api.post('/usuario/login', {
           username: formData.identifier, 
           password: formData.password
       });
 
-      // 4. Si Java dice OK, guardamos el token
-      const token = response.data.token;
-      console.log("Login exitoso, token:", token);
+      // El backend devuelve: { token, rol, nombre, id }
+      const userData = loginResponse.data;
+      console.log("Login exitoso, datos:", userData);
 
-      // 5. Guardamos el token REAL
-      localStorage.setItem('token', token);
+      // Validar que se recibió el token
+      if (!userData || !userData.token) {
+        setError('Error al obtener token de autenticación');
+        return;
+      }
 
-      // (OPCIONAL) Simulamos los datos del usuario para mantener tu lógica de roles
-      // Ya que por ahora el backend solo devuelve el token.
-      const userPayload = { 
-        nombre: formData.identifier, 
-        rol: 'admin' 
+      // Guardar el token y los datos del usuario
+      localStorage.setItem('token', userData.token);
+      
+      const userPayload = {
+        id: userData.id,
+        nombre: userData.nombre,
+        rol: userData.rol,
+        // El backend solo devuelve estos campos básicos
+        // Si necesitas más datos, debes hacer otra petición o ampliar el backend
       };
       
       localStorage.setItem('user', JSON.stringify(userPayload));
+      sessionStorage.setItem('currentUser', JSON.stringify(userPayload));
 
-      // 6. Redirigimos
-      // Como sabemos que el usuario de Java es admin, lo mandamos al admin panel
-      navigate('/admin', { replace: true });
+      // Redirigir según el rol del usuario
+      if (userData.rol === 'admin' || userData.rol === 'inventario') {
+        navigate('/admin', { replace: true });
+      } else {
+        // Si es cliente, redirigir a la página principal
+        navigate('/', { replace: true });
+      }
 
     } catch (err) {
       console.error("Error de login:", err);
-      // Si falla, mostramos mensaje de error
-      setError('Usuario o contraseña incorrectos (Verifica tu API).');
+      
+      // Manejar diferentes tipos de errores
+      if (err.response) {
+        if (err.response.status === 401 || err.response.status === 404) {
+          setError('Usuario o contraseña incorrectos');
+        } else {
+          setError(`Error del servidor: ${err.response.data.message || err.response.statusText}`);
+        }
+      } else if (err.request) {
+        setError('No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
+      } else {
+        setError('Error al procesar la solicitud');
+      }
     }
   };
 

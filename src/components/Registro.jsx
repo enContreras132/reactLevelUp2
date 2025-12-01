@@ -36,7 +36,9 @@ function Registro() {
         mail: '',
         rut: '',
         nacimiento: '',
-        direccion: ''
+        direccion: '',
+        password: '',
+        confirmPassword: ''
     });
 
     const handleSubmit = (e) => {
@@ -165,6 +167,36 @@ function Registro() {
                                         )}
                                         {touched.direccion && errors.direccion && (
                                         <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.direccion}</div>)}                                    </div>
+                                    <div className={getFieldClass('password')}>
+                                        <label htmlFor="password" style={{color: 'white'}}>Contraseña</label>
+                                        <input 
+                                            id="password" 
+                                            name="password"
+                                            type="password" 
+                                            className="form-control" 
+                                            placeholder="Mínimo 6 caracteres"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.password && errors.password && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.password}</div>)}
+                                    </div>
+                                    <div className={getFieldClass('confirmPassword')}>
+                                        <label htmlFor="confirmPassword" style={{color: 'white'}}>Confirmar Contraseña</label>
+                                        <input 
+                                            id="confirmPassword" 
+                                            name="confirmPassword"
+                                            type="password" 
+                                            className="form-control" 
+                                            placeholder="Repite tu contraseña"
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {touched.confirmPassword && errors.confirmPassword && (
+                                        <div className="alert alert-danger py-2 mt-2" style={{display: 'block'}}>{errors.confirmPassword}</div>)}
+                                    </div>
                                         <div className="btn_box">
                                         <button type="submit">
                                             Registrarme

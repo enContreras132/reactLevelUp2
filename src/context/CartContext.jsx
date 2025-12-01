@@ -1,10 +1,34 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import * as data from '../data/data'; // usa data.productosData o data.productos
-const productosSource = data.productosData ?? data.productos ?? [];
+import axios from 'axios';
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+  const [productosSource, setProductosSource] = useState([]);
+
+  // Cargar productos desde la API al montar
+  useEffect(() => {
+    const cargarProductos = async () => {
+      try {
+        const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
+          axios.get('http://localhost:8080/audifono').catch(() => ({ data: [] })),
+          axios.get('http://localhost:8080/mouse').catch(() => ({ data: [] })),
+          axios.get('http://localhost:8080/teclado').catch(() => ({ data: [] })),
+          axios.get('http://localhost:8080/notebook').catch(() => ({ data: [] }))
+        ]);
+        const todos = [
+          ...audifonosRes.data,
+          ...mouseRes.data,
+          ...tecladosRes.data,
+          ...notebooksRes.data
+        ];
+        setProductosSource(todos);
+      } catch (err) {
+        console.error('Error al cargar productos en CartContext:', err);
+      }
+    };
+    cargarProductos();
+  }, []);
   const getInitialItems = () => {
     try {
       // Migrar clave legacy 'carrito' a 'cart' si aún existe

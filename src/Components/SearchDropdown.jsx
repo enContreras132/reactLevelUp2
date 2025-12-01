@@ -1,10 +1,38 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { productos } from '../data/data.js';
+import axios from 'axios';
 
 export default function SearchDropdown({ items = null }) {
   const navigate = useNavigate();
-  const allItems = useMemo(() => (items ?? productos), [items]);
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const cargarProductos = async () => {
+      try {
+        const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
+          axios.get('http://localhost:8080/audifono').catch(() => ({ data: [] })),
+          axios.get('http://localhost:8080/mouse').catch(() => ({ data: [] })),
+          axios.get('http://localhost:8080/teclado').catch(() => ({ data: [] })),
+          axios.get('http://localhost:8080/notebook').catch(() => ({ data: [] }))
+        ]);
+        const todos = [
+          ...audifonosRes.data,
+          ...mouseRes.data,
+          ...tecladosRes.data,
+          ...notebooksRes.data
+        ];
+        setProductos(todos);
+      } catch (err) {
+        console.error('Error al cargar productos:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarProductos();
+  }, []);
+
+  const allItems = useMemo(() => (items ?? productos), [items, productos]);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);

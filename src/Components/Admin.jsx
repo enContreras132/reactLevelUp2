@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Soloaudifonos from './Soloaudifonos';
 import Solomouse from './Solomouse';
 import Soloteclado from './Soloteclado';
@@ -12,7 +13,10 @@ export default function Admin() {
   const [currentUser, setCurrentUser] = useState(null);
   const [view, setView] = useState('dashboard'); // 'dashboard' | 'productos' | 'pedidos' | 'usuarios'
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [deleteCategory, setDeleteCategory] = useState('');
+  const [deleteId, setDeleteId] = useState('');
   const [newProduct, setNewProduct] = useState({});
 
   useEffect(() => {
@@ -109,7 +113,7 @@ export default function Admin() {
       setNewProduct(prev => ({ ...prev, [campo]: valor }));
     };
 
-    const handleSubmitProduct = (e) => {
+    const handleSubmitProduct = async (e) => {
       e.preventDefault();
       
       // Validación básica
@@ -118,14 +122,122 @@ export default function Admin() {
         return;
       }
 
-      // TODO: Aquí irá la llamada a la API para crear el producto
-      console.log('Nuevo producto a enviar:', newProduct);
-      alert('Producto agregado correctamente (pendiente: integración con API)');
+      // Determinar el endpoint según la categoría
+      const endpoints = {
+        'Audífono': 'http://localhost:8080/audifono',
+        'Mouse': 'http://localhost:8080/mouse',
+        'Teclado': 'http://localhost:8080/teclado',
+        'Notebook': 'http://localhost:8080/notebook'
+      };
+
+      const endpoint = endpoints[selectedCategory];
       
-      // Resetear formulario
-      setShowAddForm(false);
-      setSelectedCategory('');
-      setNewProduct({});
+      if (!endpoint) {
+        alert('Error: Categoría no válida');
+        return;
+      }
+
+      try {
+        // Preparar datos: convertir strings a números donde corresponda
+        const productData = { ...newProduct };
+        
+        // Convertir campos numéricos
+        const numericFields = ['precio', 'stock', 'botonesCant', 'dpi', 'dpiMin', 'dpiMax'];
+        numericFields.forEach(field => {
+          if (productData[field] !== undefined && productData[field] !== '') {
+            productData[field] = Number(productData[field]);
+          }
+        });
+
+        // Realizar POST request
+        const response = await axios.post(endpoint, productData);
+        
+        console.log('Producto creado:', response.data);
+        alert('Producto agregado correctamente');
+        
+        // Resetear formulario
+        setShowAddForm(false);
+        setSelectedCategory('');
+        setNewProduct({});
+        
+        // Recargar la vista para mostrar el nuevo producto
+        setView('dashboard');
+        setTimeout(() => setView('productos'), 100);
+        
+      } catch (error) {
+        console.error('Error al crear producto:', error);
+        
+        if (error.response) {
+          // El servidor respondió con un código de error
+          alert(`Error al guardar el producto: ${error.response.data.message || error.response.statusText}`);
+        } else if (error.request) {
+          // La petición fue hecha pero no hubo respuesta
+          alert('Error: No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
+        } else {
+          // Algo pasó al configurar la petición
+          alert(`Error: ${error.message}`);
+        }
+      }
+    };
+
+    const handleDeleteProduct = async (e) => {
+      e.preventDefault();
+      
+      // Validación
+      if (!deleteCategory || !deleteId) {
+        alert('Por favor selecciona la categoría e ingresa el ID del producto');
+        return;
+      }
+
+      // Confirmar eliminación
+      if (!window.confirm(`¿Estás seguro de eliminar el producto con ID ${deleteId} de la categoría ${deleteCategory}?`)) {
+        return;
+      }
+
+      // Determinar el endpoint según la categoría
+      const endpoints = {
+        'Audífono': 'http://localhost:8080/audifono',
+        'Mouse': 'http://localhost:8080/mouse',
+        'Teclado': 'http://localhost:8080/teclado',
+        'Notebook': 'http://localhost:8080/notebook'
+      };
+
+      const endpoint = `${endpoints[deleteCategory]}/${deleteId}`;
+      
+      if (!endpoints[deleteCategory]) {
+        alert('Error: Categoría no válida');
+        return;
+      }
+
+      try {
+        await axios.delete(endpoint);
+        
+        alert('Producto eliminado correctamente');
+        
+        // Resetear formulario
+        setShowDeleteForm(false);
+        setDeleteCategory('');
+        setDeleteId('');
+        
+        // Recargar la vista para actualizar la tabla
+        setView('dashboard');
+        setTimeout(() => setView('productos'), 100);
+        
+      } catch (error) {
+        console.error('Error al eliminar producto:', error);
+        
+        if (error.response) {
+          if (error.response.status === 404) {
+            alert('Error: Producto no encontrado');
+          } else {
+            alert(`Error al eliminar el producto: ${error.response.data.message || error.response.statusText}`);
+          }
+        } else if (error.request) {
+          alert('Error: No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
+        } else {
+          alert(`Error: ${error.message}`);
+        }
+      }
     };
 
     const renderFormField = (campo) => {
@@ -206,13 +318,26 @@ export default function Admin() {
 
     return (
       <div>
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-4 gap-2">
           <button 
             className="btn btn-success"
-            onClick={() => setShowAddForm(!showAddForm)}
+            onClick={() => {
+              setShowAddForm(!showAddForm);
+              if (showDeleteForm) setShowDeleteForm(false);
+            }}
           >
             <i className="bi bi-plus-lg me-1"></i>
             {showAddForm ? 'Cancelar' : 'Agregar producto'}
+          </button>
+          <button 
+            className="btn btn-danger"
+            onClick={() => {
+              setShowDeleteForm(!showDeleteForm);
+              if (showAddForm) setShowAddForm(false);
+            }}
+          >
+            <i className="bi bi-trash me-1"></i>
+            {showDeleteForm ? 'Cancelar' : 'Eliminar producto'}
           </button>
         </div>
 
@@ -279,6 +404,72 @@ export default function Admin() {
                   </div>
                 </form>
               )}
+            </div>
+          </div>
+        )}
+
+        {showDeleteForm && (
+          <div className="card mb-4" style={{ backgroundColor: '#1a1f2e', border: '1px solid #dc3545' }}>
+            <div className="card-body">
+              <h5 className="card-title text-light mb-3">
+                <i className="bi bi-trash me-2"></i>
+                Eliminar Producto
+              </h5>
+              
+              <form onSubmit={handleDeleteProduct}>
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Categoría *</label>
+                    <select
+                      className="form-select"
+                      value={deleteCategory}
+                      onChange={(e) => setDeleteCategory(e.target.value)}
+                      required
+                    >
+                      <option value="">Seleccionar categoría</option>
+                      {categorias.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">ID del Producto *</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={deleteId}
+                      onChange={(e) => setDeleteId(e.target.value)}
+                      placeholder="Ingresa el ID del producto"
+                      required
+                      min="1"
+                    />
+                  </div>
+                </div>
+
+                <div className="alert alert-warning mt-3 mb-0">
+                  <i className="bi bi-exclamation-triangle me-2"></i>
+                  <strong>Advertencia:</strong> Esta acción no se puede deshacer. El producto será eliminado permanentemente de la base de datos.
+                </div>
+
+                <div className="mt-4 d-flex gap-2">
+                  <button type="submit" className="btn btn-danger">
+                    <i className="bi bi-trash me-1"></i>
+                    Eliminar Producto
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-outline-secondary"
+                    onClick={() => {
+                      setShowDeleteForm(false);
+                      setDeleteCategory('');
+                      setDeleteId('');
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

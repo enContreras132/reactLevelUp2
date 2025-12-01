@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
-import { productos } from "../data/data.js";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useCart } from "../context/CartContext";
 
 function formatCurrency(value) {
@@ -16,10 +17,63 @@ function formatCurrency(value) {
 
 function SingleProduct() {
   const { id } = useParams();
-  const product = productos.find((p) => p.id === Number(id));
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { addItem } = useCart();
 
-  if (!product) {
+  useEffect(() => {
+    const cargarProducto = async () => {
+      try {
+        setLoading(true);
+        // Buscar en todos los endpoints
+        const endpoints = [
+          'http://localhost:8080/audifono',
+          'http://localhost:8080/mouse',
+          'http://localhost:8080/teclado',
+          'http://localhost:8080/notebook'
+        ];
+        
+        for (const endpoint of endpoints) {
+          try {
+            const response = await axios.get(`${endpoint}/${id}`);
+            if (response.data) {
+              setProduct(response.data);
+              setLoading(false);
+              return;
+            }
+          } catch (err) {
+            // Continuar buscando en el siguiente endpoint
+            continue;
+          }
+        }
+        
+        // Si no se encontró en ningún endpoint
+        setError('Producto no encontrado');
+        setLoading(false);
+      } catch (err) {
+        console.error('Error al cargar producto:', err);
+        setError('Error al cargar el producto');
+        setLoading(false);
+      }
+    };
+
+    cargarProducto();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="container py-4">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !product) {
     return (
       <div className="container py-4">
         <div className="alert alert-warning" role="alert">
@@ -40,10 +94,14 @@ function SingleProduct() {
         <div className="col-12 col-md-5">
           <div className="card shadow-sm h-100">
             <img
-              src={product.imagen}
+              src={product.imagen || product.urlImagen || 'https://via.placeholder.com/400x300?text=Sin+imagen'}
               alt={product.nombre}
               className="card-img-top img-fluid"
               style={{ objectFit: "contain", maxHeight: 360 }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://via.placeholder.com/400x300?text=Sin+imagen';
+              }}
             />
           </div>
         </div>
