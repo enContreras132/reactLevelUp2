@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Soloaudifonos from './Soloaudifonos';
-import Solomouse from './Solomouse';
-import Soloteclado from './Soloteclado';
-import Solonotebook from './Solonotebook';
-import Soloclientes from './Soloclientes';
-import Soloadmin from './Soloadmin';
+import Soloaudifonos from './MySoloaudifonos';
+import Solomouse from './MySolomouse';
+import Soloteclado from './MySoloteclado';
+import Solonotebook from './MySolonotebook';
+import Soloclientes from './MySoloclientes';
+import Soloadmin from './MySoloadmin';
 
 export default function Admin() {
   const navigate = useNavigate();

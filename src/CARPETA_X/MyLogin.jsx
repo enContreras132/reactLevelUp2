@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useFormValidation } from '../utils/useFormValidation.js';
-import api from '../api/axiosConfig'; 
+import api from '../api/axiosConfig.js'; 
 
 export default function Login() {
   const navigate = useNavigate();

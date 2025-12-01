@@ -1,8 +1,8 @@
 import React from 'react';
-import Carrusel from '../Components/Carrusel.jsx';
-import Ofertas from '../Components/Ofertas.jsx';
-import Separador from '../Components/Separador.jsx';
-import SobreNosotros from '../components/SobreNosotros.jsx';
+import Carrusel from '../Components/MyCarrusel.jsx';
+import Ofertas from '../Components/MyOfertas.jsx';
+import Separador from '../Components/MySeparador.jsx';
+import SobreNosotros from '../Components/MySobreNosotros.jsx';
 
 const HomePage = () => {
   return (
