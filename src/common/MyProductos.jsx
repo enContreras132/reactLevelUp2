@@ -18,12 +18,14 @@ export default function Productos() {
     try {
       setLoading(true);
       
+      const API_URL = 'https://levelupapi-production.up.railway.app';
+      
       // Llamadas paralelas a todas las APIs
       const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
-        axios.get('http://localhost:8080/audifono').catch(() => ({ data: [] })),
-        axios.get('http://localhost:8080/mouse').catch(() => ({ data: [] })),
-        axios.get('http://localhost:8080/teclado').catch(() => ({ data: [] })),
-        axios.get('http://localhost:8080/notebook').catch(() => ({ data: [] }))
+        axios.get(`${API_URL}/audifono`).catch(() => ({ data: [] })),
+        axios.get(`${API_URL}/mouse`).catch(() => ({ data: [] })),
+        axios.get(`${API_URL}/teclado`).catch(() => ({ data: [] })),
+        axios.get(`${API_URL}/notebook`).catch(() => ({ data: [] }))
       ]);
 
       // Combinar todos los productos

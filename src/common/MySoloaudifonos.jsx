@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/audifono';
+const API_URL = 'https://levelupapi-production.up.railway.app/audifono';
 const Soloaudifonos = () => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);

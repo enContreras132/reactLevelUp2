@@ -10,7 +10,7 @@ function Registro() {
 
     useEffect(() => {
         // Cargar regiones desde la API
-        axios.get('http://localhost:8080/region')
+        axios.get('https://levelupapi-production.up.railway.app/region')
             .then(response => {
                 const data = Array.isArray(response.data) ? response.data : [response.data];
                 setRegiones(data);

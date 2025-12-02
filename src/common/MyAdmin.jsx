@@ -123,11 +123,12 @@ export default function Admin() {
       }
 
       // Determinar el endpoint según la categoría
+      const API_BASE = 'https://levelupapi-production.up.railway.app';
       const endpoints = {
-        'Audífono': 'http://localhost:8080/audifono',
-        'Mouse': 'http://localhost:8080/mouse',
-        'Teclado': 'http://localhost:8080/teclado',
-        'Notebook': 'http://localhost:8080/notebook'
+        'Audífono': `${API_BASE}/audifono`,
+        'Mouse': `${API_BASE}/mouse`,
+        'Teclado': `${API_BASE}/teclado`,
+        'Notebook': `${API_BASE}/notebook`
       };
 
       const endpoint = endpoints[selectedCategory];
@@ -195,11 +196,12 @@ export default function Admin() {
       }
 
       // Determinar el endpoint según la categoría
+      const API_BASE = 'https://levelupapi-production.up.railway.app';
       const endpoints = {
-        'Audífono': 'http://localhost:8080/audifono',
-        'Mouse': 'http://localhost:8080/mouse',
-        'Teclado': 'http://localhost:8080/teclado',
-        'Notebook': 'http://localhost:8080/notebook'
+        'Audífono': `${API_BASE}/audifono`,
+        'Mouse': `${API_BASE}/mouse`,
+        'Teclado': `${API_BASE}/teclado`,
+        'Notebook': `${API_BASE}/notebook`
       };
 
       const endpoint = `${endpoints[deleteCategory]}/${deleteId}`;

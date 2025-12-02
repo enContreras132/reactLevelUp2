@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/mouse';
+const API_URL = 'https://levelupapi-production.up.railway.app/mouse';
 const Solomouse = () => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);

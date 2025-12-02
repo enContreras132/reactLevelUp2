@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/admin';  // ✅ CAMBIADO AQUÍ
+const API_URL = 'https://levelupapi-production.up.railway.app/admin';
 
 const Soloadmin = () => {
     const [usuarios, setUsuarios] = useState([]);

@@ -27,11 +27,12 @@ function SingleProduct() {
       try {
         setLoading(true);
         // Buscar en todos los endpoints
-        const endpoints = [
-          'http://localhost:8080/audifono',
-          'http://localhost:8080/mouse',
-          'http://localhost:8080/teclado',
-          'http://localhost:8080/notebook'
+        const API_BASE = 'https://levelupapi-production.up.railway.app';
+      const endpoints = [
+          `${API_BASE}/audifono`,
+          `${API_BASE}/mouse`,
+          `${API_BASE}/teclado`,
+          `${API_BASE}/notebook`
         ];
         
         for (const endpoint of endpoints) {

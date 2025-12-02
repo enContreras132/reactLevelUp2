@@ -10,11 +10,12 @@ export default function SearchDropdown({ items = null }) {
   useEffect(() => {
     const cargarProductos = async () => {
       try {
-        const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
-          axios.get('http://localhost:8080/audifono').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/mouse').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/teclado').catch(() => ({ data: [] })),
-          axios.get('http://localhost:8080/notebook').catch(() => ({ data: [] }))
+        const API_BASE = 'https://levelupapi-production.up.railway.app';
+      const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
+          axios.get(`${API_BASE}/audifono`).catch(() => ({ data: [] })),
+          axios.get(`${API_BASE}/mouse`).catch(() => ({ data: [] })),
+          axios.get(`${API_BASE}/teclado`).catch(() => ({ data: [] })),
+          axios.get(`${API_BASE}/notebook`).catch(() => ({ data: [] }))
         ]);
         const todos = [
           ...audifonosRes.data,
