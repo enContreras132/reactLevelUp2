@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// URL del backend en Railway
+const API_URL = import.meta.env.VITE_API_URL || 'https://levelupapi-production.up.railway.app';
+
 const api = axios.create({
-    baseURL: 'http://localhost:8080', // La dirección de tu Spring Boot
+    baseURL: API_URL,
 });
 
 // Esto intercepta todas las peticiones y les pega el token si existe
