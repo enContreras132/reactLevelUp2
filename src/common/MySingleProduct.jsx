@@ -136,7 +136,7 @@ function SingleProduct() {
             )}
 
             <div className="mt-auto d-flex gap-2 pt-2">
-              <Link to="/productos" className="btn btn-outline-secondary">
+              <Link to="/.." className="btn btn-outline-secondary">
                 Volver
               </Link>
               <button 
