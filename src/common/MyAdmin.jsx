@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 import Soloaudifonos from './MySoloaudifonos';
 import Solomouse from './MySolomouse';
 import Soloteclado from './MySoloteclado';
@@ -123,12 +123,11 @@ export default function Admin() {
       }
 
       // Determinar el endpoint según la categoría
-      const API_BASE = 'https://levelupapi-production.up.railway.app';
       const endpoints = {
-        'Audífono': `${API_BASE}/audifono`,
-        'Mouse': `${API_BASE}/mouse`,
-        'Teclado': `${API_BASE}/teclado`,
-        'Notebook': `${API_BASE}/notebook`
+        'Audífono': '/audifono',
+        'Mouse': '/mouse',
+        'Teclado': '/teclado',
+        'Notebook': '/notebook'
       };
 
       const endpoint = endpoints[selectedCategory];
@@ -151,7 +150,7 @@ export default function Admin() {
         });
 
         // Realizar POST request
-        const response = await axios.post(endpoint, productData);
+        const response = await api.post(endpoint, productData);
         
         console.log('Producto creado:', response.data);
         alert('Producto agregado correctamente');
@@ -196,12 +195,11 @@ export default function Admin() {
       }
 
       // Determinar el endpoint según la categoría
-      const API_BASE = 'https://levelupapi-production.up.railway.app';
       const endpoints = {
-        'Audífono': `${API_BASE}/audifono`,
-        'Mouse': `${API_BASE}/mouse`,
-        'Teclado': `${API_BASE}/teclado`,
-        'Notebook': `${API_BASE}/notebook`
+        'Audífono': '/audifono',
+        'Mouse': '/mouse',
+        'Teclado': '/teclado',
+        'Notebook': '/notebook'
       };
 
       const endpoint = `${endpoints[deleteCategory]}/${deleteId}`;
@@ -212,7 +210,7 @@ export default function Admin() {
       }
 
       try {
-        await axios.delete(endpoint);
+        await api.delete(endpoint);
         
         alert('Producto eliminado correctamente');
         
