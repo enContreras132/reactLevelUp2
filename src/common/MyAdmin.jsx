@@ -18,6 +18,14 @@ export default function Admin() {
   const [deleteCategory, setDeleteCategory] = useState('');
   const [deleteId, setDeleteId] = useState('');
   const [newProduct, setNewProduct] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  
+  // Estados para gestión de usuarios
+  const [showAddUserForm, setShowAddUserForm] = useState(false);
+  const [showDeleteUserForm, setShowDeleteUserForm] = useState(false);
+  const [newUser, setNewUser] = useState({});
+  const [deleteUserId, setDeleteUserId] = useState('');
 
   useEffect(() => {
     // Intentar leer sessionStorage primero, si no existe intentar localStorage
@@ -153,7 +161,8 @@ export default function Admin() {
         const response = await api.post(endpoint, productData);
         
         console.log('Producto creado:', response.data);
-        alert('Producto agregado correctamente');
+        setSuccessMessage('Producto agregado correctamente');
+        setErrorMessage('');
         
         // Resetear formulario
         setShowAddForm(false);
@@ -162,21 +171,29 @@ export default function Admin() {
         
         // Recargar la vista para mostrar el nuevo producto
         setView('dashboard');
-        setTimeout(() => setView('productos'), 100);
+        setTimeout(() => {
+          setView('productos');
+          // Limpiar mensaje después de 5 segundos
+          setTimeout(() => setSuccessMessage(''), 5000);
+        }, 100);
         
       } catch (error) {
         console.error('Error al crear producto:', error);
+        setSuccessMessage('');
         
         if (error.response) {
           // El servidor respondió con un código de error
-          alert(`Error al guardar el producto: ${error.response.data.message || error.response.statusText}`);
+          setErrorMessage(`Error al guardar el producto: ${error.response.data.message || error.response.statusText}`);
         } else if (error.request) {
           // La petición fue hecha pero no hubo respuesta
-          alert('Error: No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
+          setErrorMessage('Error: No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
         } else {
           // Algo pasó al configurar la petición
-          alert(`Error: ${error.message}`);
+          setErrorMessage(`Error: ${error.message}`);
         }
+        
+        // Limpiar mensaje de error después de 5 segundos
+        setTimeout(() => setErrorMessage(''), 5000);
       }
     };
 
@@ -186,11 +203,6 @@ export default function Admin() {
       // Validación
       if (!deleteCategory || !deleteId) {
         alert('Por favor selecciona la categoría e ingresa el ID del producto');
-        return;
-      }
-
-      // Confirmar eliminación
-      if (!window.confirm(`¿Estás seguro de eliminar el producto con ID ${deleteId} de la categoría ${deleteCategory}?`)) {
         return;
       }
 
@@ -212,7 +224,8 @@ export default function Admin() {
       try {
         await api.delete(endpoint);
         
-        alert('Producto eliminado correctamente');
+        setSuccessMessage('✅ Producto eliminado correctamente');
+        setErrorMessage('');
         
         // Resetear formulario
         setShowDeleteForm(false);
@@ -221,22 +234,30 @@ export default function Admin() {
         
         // Recargar la vista para actualizar la tabla
         setView('dashboard');
-        setTimeout(() => setView('productos'), 100);
+        setTimeout(() => {
+          setView('productos');
+          // Limpiar mensaje después de 5 segundos
+          setTimeout(() => setSuccessMessage(''), 5000);
+        }, 100);
         
       } catch (error) {
         console.error('Error al eliminar producto:', error);
+        setSuccessMessage('');
         
         if (error.response) {
           if (error.response.status === 404) {
-            alert('Error: Producto no encontrado');
+            setErrorMessage('❌ Error: Producto no encontrado');
           } else {
-            alert(`Error al eliminar el producto: ${error.response.data.message || error.response.statusText}`);
+            setErrorMessage(`❌ Error al eliminar el producto: ${error.response.data.message || error.response.statusText}`);
           }
         } else if (error.request) {
-          alert('Error: No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
+          setErrorMessage('❌ Error: No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
         } else {
-          alert(`Error: ${error.message}`);
+          setErrorMessage(`❌ Error: ${error.message}`);
         }
+        
+        // Limpiar mensaje de error después de 5 segundos
+        setTimeout(() => setErrorMessage(''), 5000);
       }
     };
 
@@ -318,6 +339,31 @@ export default function Admin() {
 
     return (
       <div>
+        {/* Mensajes de éxito y error */}
+        {successMessage && (
+          <div className="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{successMessage}</strong>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={() => setSuccessMessage('')}
+              aria-label="Close"
+            ></button>
+          </div>
+        )}
+        
+        {errorMessage && (
+          <div className="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{errorMessage}</strong>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={() => setErrorMessage('')}
+              aria-label="Close"
+            ></button>
+          </div>
+        )}
+
         <div className="d-flex justify-content-between align-items-center mb-4 gap-2">
           <button 
             className="btn btn-success"
@@ -486,9 +532,334 @@ export default function Admin() {
   // pedidos view removed — table intentionally omitted
 
   function renderUsuarios() {
+    const handleAddUser = async (e) => {
+      e.preventDefault();
+      
+      // Validación básica
+      if (!newUser.nombre || !newUser.correo || !newUser.contraseña) {
+        setErrorMessage('Por favor completa los campos obligatorios: nombre, correo y contraseña');
+        setTimeout(() => setErrorMessage(''), 5000);
+        return;
+      }
+
+      try {
+        // Agregar rol de cliente por defecto
+        const userData = {
+          ...newUser,
+          rol: 'cliente'
+        };
+
+        const response = await api.post('/usuario', userData);
+        
+        console.log('Usuario creado:', response.data);
+        setSuccessMessage('Cliente agregado correctamente');
+        setErrorMessage('');
+        
+        // Resetear formulario
+        setShowAddUserForm(false);
+        setNewUser({});
+        
+        // Recargar vista
+        setView('dashboard');
+        setTimeout(() => {
+          setView('usuarios');
+          setTimeout(() => setSuccessMessage(''), 5000);
+        }, 100);
+        
+      } catch (error) {
+        console.error('Error al crear usuario:', error);
+        setSuccessMessage('');
+        
+        if (error.response) {
+          setErrorMessage(`Error al guardar el usuario: ${error.response.data.message || error.response.statusText}`);
+        } else if (error.request) {
+          setErrorMessage('Error: No se pudo conectar con el servidor.');
+        } else {
+          setErrorMessage(`Error: ${error.message}`);
+        }
+        
+        setTimeout(() => setErrorMessage(''), 5000);
+      }
+    };
+
+    const handleDeleteUser = async (e) => {
+      e.preventDefault();
+      
+      if (!deleteUserId) {
+        setErrorMessage('Por favor ingresa el ID del usuario');
+        setTimeout(() => setErrorMessage(''), 5000);
+        return;
+      }
+
+      if (!window.confirm(`¿Estás seguro de eliminar el usuario con ID ${deleteUserId}?`)) {
+        return;
+      }
+
+      try {
+        await api.delete(`/usuario/${deleteUserId}`);
+        
+        setSuccessMessage('Usuario eliminado correctamente');
+        setErrorMessage('');
+        
+        setShowDeleteUserForm(false);
+        setDeleteUserId('');
+        
+        setView('dashboard');
+        setTimeout(() => {
+          setView('usuarios');
+          setTimeout(() => setSuccessMessage(''), 5000);
+        }, 100);
+        
+      } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        setSuccessMessage('');
+        
+        if (error.response) {
+          if (error.response.status === 404) {
+            setErrorMessage('Error: Usuario no encontrado');
+          } else {
+            setErrorMessage(`Error al eliminar el usuario: ${error.response.data.message || error.response.statusText}`);
+          }
+        } else if (error.request) {
+          setErrorMessage('Error: No se pudo conectar con el servidor.');
+        } else {
+          setErrorMessage(`Error: ${error.message}`);
+        }
+        
+        setTimeout(() => setErrorMessage(''), 5000);
+      }
+    };
+
+    const handleUserInputChange = (campo, valor) => {
+      setNewUser(prev => ({ ...prev, [campo]: valor }));
+    };
+
     return (
       <div>
         <h2 className="mb-4">Gestión de Usuarios</h2>
+        
+        {/* Mensajes de éxito y error */}
+        {successMessage && (
+          <div className="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{successMessage}</strong>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={() => setSuccessMessage('')}
+              aria-label="Close"
+            ></button>
+          </div>
+        )}
+        
+        {errorMessage && (
+          <div className="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{errorMessage}</strong>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={() => setErrorMessage('')}
+              aria-label="Close"
+            ></button>
+          </div>
+        )}
+
+        {/* Botones de acción */}
+        <div className="d-flex justify-content-between align-items-center mb-4 gap-2">
+          <button 
+            className="btn btn-success"
+            onClick={() => {
+              setShowAddUserForm(!showAddUserForm);
+              if (showDeleteUserForm) setShowDeleteUserForm(false);
+            }}
+          >
+            <i className="bi bi-plus-lg me-1"></i>
+            {showAddUserForm ? 'Cancelar' : 'Agregar Cliente'}
+          </button>
+          <button 
+            className="btn btn-danger"
+            onClick={() => {
+              setShowDeleteUserForm(!showDeleteUserForm);
+              if (showAddUserForm) setShowAddUserForm(false);
+            }}
+          >
+            <i className="bi bi-trash me-1"></i>
+            {showDeleteUserForm ? 'Cancelar' : 'Eliminar Usuario'}
+          </button>
+        </div>
+
+        {/* Formulario agregar cliente */}
+        {showAddUserForm && (
+          <div className="card mb-4" style={{ backgroundColor: '#1a1f2e', border: '1px solid #00ffea' }}>
+            <div className="card-body">
+              <h5 className="card-title text-light mb-3">Nuevo Cliente</h5>
+              
+              <form onSubmit={handleAddUser}>
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Nombre *</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newUser.nombre || ''}
+                      onChange={(e) => handleUserInputChange('nombre', e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Apellido</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newUser.apellido || ''}
+                      onChange={(e) => handleUserInputChange('apellido', e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Correo *</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={newUser.correo || ''}
+                      onChange={(e) => handleUserInputChange('correo', e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Usuario</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newUser.usuario || ''}
+                      onChange={(e) => handleUserInputChange('usuario', e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Contraseña *</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      value={newUser.contraseña || ''}
+                      onChange={(e) => handleUserInputChange('contraseña', e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Teléfono</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newUser.telefono || ''}
+                      onChange={(e) => handleUserInputChange('telefono', e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="col-12">
+                    <label className="form-label text-light">Dirección</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newUser.direccion || ''}
+                      onChange={(e) => handleUserInputChange('direccion', e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Comuna</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newUser.comuna || ''}
+                      onChange={(e) => handleUserInputChange('comuna', e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <label className="form-label text-light">Región</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={newUser.region || ''}
+                      onChange={(e) => handleUserInputChange('region', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-4 d-flex gap-2">
+                  <button type="submit" className="btn btn-primary">
+                    <i className="bi bi-save me-1"></i>
+                    Guardar Cliente
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-outline-secondary"
+                    onClick={() => {
+                      setShowAddUserForm(false);
+                      setNewUser({});
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Formulario eliminar usuario */}
+        {showDeleteUserForm && (
+          <div className="card mb-4" style={{ backgroundColor: '#1a1f2e', border: '1px solid #dc3545' }}>
+            <div className="card-body">
+              <h5 className="card-title text-light mb-3">
+                <i className="bi bi-trash me-2"></i>
+                Eliminar Usuario
+              </h5>
+              
+              <form onSubmit={handleDeleteUser}>
+                <div className="row g-3">
+                  <div className="col-md-12">
+                    <label className="form-label text-light">ID del Usuario *</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={deleteUserId}
+                      onChange={(e) => setDeleteUserId(e.target.value)}
+                      placeholder="Ingresa el ID del usuario"
+                      required
+                      min="1"
+                    />
+                  </div>
+                </div>
+
+                <div className="alert alert-warning mt-3 mb-0">
+                  <i className="bi bi-exclamation-triangle me-2"></i>
+                  <strong>Advertencia:</strong> Esta acción no se puede deshacer. El usuario será eliminado permanentemente de la base de datos.
+                </div>
+
+                <div className="mt-4 d-flex gap-2">
+                  <button type="submit" className="btn btn-danger">
+                    <i className="bi bi-trash me-1"></i>
+                    Eliminar Usuario
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-outline-secondary"
+                    onClick={() => {
+                      setShowDeleteUserForm(false);
+                      setDeleteUserId('');
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
         
         {/* Tablas de usuarios por rol */}
         <Soloadmin />
@@ -515,7 +886,7 @@ export default function Admin() {
             </a>
           </li>
 
-          {(rol === 'admin' || rol === 'inventario') && (
+          {(rol === 'admin') && (
             <li>
               <a href="#productos" className={`nav-link ${view === 'productos' ? 'active' : 'text-white'}`} onClick={(e) => { e.preventDefault(); setView('productos'); }}>
                 <i className="bi bi-box-seam me-2"></i> Productos

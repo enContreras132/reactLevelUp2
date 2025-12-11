@@ -18,7 +18,7 @@ export default function Productos() {
     try {
       setLoading(true);
       
-      const API_URL = 'https://levelupapi-production.up.railway.app';
+      const API_URL = 'http://localhost:8080';
       
       // Llamadas paralelas a todas las APIs
       const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
@@ -127,7 +127,7 @@ export default function Productos() {
                     {p.descripcion && <p>{p.descripcion}</p>}
                     <div className="options mt-auto">
                       <h6>${(p.precio || 0).toLocaleString('es-CL')}</h6>
-                      <Link to={`/producto/${encodeURIComponent(p.id)}`} className='btn btn-secondary'>Ver producto</Link>
+                      <Link to={`/${p.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}/${encodeURIComponent(p.id)}`} className='btn btn-secondary'>Ver producto</Link>
                       <button
                         type="button"
                         className="btn btn-primary"

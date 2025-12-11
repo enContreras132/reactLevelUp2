@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'https://levelupapi-production.up.railway.app/admin';
+const API_URL = 'http://localhost:8080';
 
 const Soloadmin = () => {
     const [usuarios, setUsuarios] = useState([]);
@@ -9,7 +9,7 @@ const Soloadmin = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(API_URL)
+        axios.get(`${API_URL}/admin`)
             .then(response => {
                 // Normalizar datos
                 const data = Array.isArray(response.data) ? response.data : [response.data];

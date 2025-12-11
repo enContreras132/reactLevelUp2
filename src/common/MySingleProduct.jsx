@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
@@ -17,6 +17,7 @@ function formatCurrency(value) {
 
 function SingleProduct() {
   const { id } = useParams();
+  const location = useLocation();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -24,30 +25,33 @@ function SingleProduct() {
 
   useEffect(() => {
     const cargarProducto = async () => {
+      console.log('=== INICIO cargarProducto ===');
+      console.log('- URL completa:', location.pathname);
+      console.log('- ID desde useParams:', id);
+      
       try {
         setLoading(true);
-        // Buscar en todos los endpoints
-        const API_BASE = 'https://levelupapi-production.up.railway.app';
-      const endpoints = [
-          `${API_BASE}/audifono`,
-          `${API_BASE}/mouse`,
-          `${API_BASE}/teclado`,
-          `${API_BASE}/notebook`
-        ];
+        const API_BASE = 'http://localhost:8080';
         
-        for (const endpoint of endpoints) {
-          try {
-            const response = await axios.get(`${endpoint}/${id}`);
-            if (response.data) {
-              setProduct(response.data);
-              setLoading(false);
-              return;
-            }
-          } catch (err) {
-            // Continuar buscando en el siguiente endpoint
-            continue;
-          }
+        // Extraer la categoría de la URL (ej: /mouse/1 -> "mouse")
+        const pathParts = location.pathname.split('/');
+        const categoria = pathParts[1];
+        
+        console.log('- Categoría extraída:', categoria);
+        console.log('- URL a llamar:', `${API_BASE}/${categoria}/${id}`);
+        
+        // Buscar el producto en el endpoint de su categoría
+        const response = await axios.get(`${API_BASE}/${categoria}/${id}`);
+        console.log('- Respuesta recibida:', response.data);
+        
+        if (response.data) {
+          setProduct(response.data);
+          setLoading(false);
+          console.log('- Producto cargado exitosamente');
+          return;
         }
+        
+        console.log('- No se recibió data en la respuesta');
         
         // Si no se encontró en ningún endpoint
         setError('Producto no encontrado');
@@ -60,7 +64,7 @@ function SingleProduct() {
     };
 
     cargarProducto();
-  }, [id]);
+  }, [id, location.pathname]);
 
   if (loading) {
     return (
@@ -136,14 +140,10 @@ function SingleProduct() {
             )}
 
             <div className="mt-auto d-flex gap-2 pt-2">
-              <Link to="/.." className="btn btn-outline-secondary">
+              <Link to="/productos" className="btn btn-outline-secondary">
                 Volver
               </Link>
-              <button 
-                type="button" 
-                className="btn btn-primary"
-                onClick={() => addItem(product, 1)}
-              >
+              <button type="button" className="btn btn-primary" onClick={() => addItem(product, 1)}>
                 Agregar al carrito
               </button>
             </div>

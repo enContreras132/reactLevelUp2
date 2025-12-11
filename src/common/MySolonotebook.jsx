@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = 'https://levelupapi-production.up.railway.app/notebook';
+const API_URL = 'http://localhost:8080';
 const Solonotebook = () => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(API_URL)
+        axios.get(`${API_URL}/notebook`)
             .then(response => {
                 
                 // Normalizar datos

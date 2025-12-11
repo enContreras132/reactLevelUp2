@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// URL del backend en Railway
-const API_URL = import.meta.env.VITE_API_URL || 'https://levelupapi-production.up.railway.app';
+// URL del backend
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 const api = axios.create({
     baseURL: API_URL,

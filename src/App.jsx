@@ -47,7 +47,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/productos" element={<ProductoPages />} />
         <Route path="/sobrenosotros" element={<AboutPage />} />
-        <Route path="/producto/:id" element={<SingleProduct />} />
+        <Route path="/mouse/:id" element={<SingleProduct />} />
+        <Route path="/audifono/:id" element={<SingleProduct />} />
+        <Route path="/teclado/:id" element={<SingleProduct />} />
+        <Route path="/notebook/:id" element={<SingleProduct />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/registro" element={<Registro />} />
