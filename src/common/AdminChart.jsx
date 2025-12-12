@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function AdminChart({ products = [], width = 700, rowHeight = 34 }) {
-  // Agrupar stock por categoría
+  
   const counts = products.reduce((acc, p) => {
     const cat = p.categoria || p.category || p.tipo || 'Sin categoría';
     const stock = Number(p.stock ?? p.cantidad ?? p.qty ?? 1) || 0;
@@ -21,7 +21,7 @@ export default function AdminChart({ products = [], width = 700, rowHeight = 34 
     <div className="admin-chart" style={{ color: '#fff' }}>
       <svg width={width} height={height} role="img" aria-label="Stock de productos por categoría">
         {entries.map((e, idx) => {
-          const barMaxWidth = width - 220; // espacio para etiqueta y valor
+          const barMaxWidth = width - 220; 
           const barWidth = Math.round((e.value / max) * barMaxWidth);
           const y = 20 + idx * rowHeight;
           const color = palette[idx % palette.length];
