@@ -10,7 +10,7 @@ export default function SearchDropdown({ items = null }) {
   useEffect(() => {
     const cargarProductos = async () => {
       try {
-        const API_BASE = 'https://levelupapi-production.up.railway.app';
+        const API_BASE = 'http://localhost:8080';
       const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
           axios.get(`${API_BASE}/audifono`).catch(() => ({ data: [] })),
           axios.get(`${API_BASE}/mouse`).catch(() => ({ data: [] })),

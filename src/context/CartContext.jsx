@@ -4,7 +4,7 @@ import axios from 'axios';
 const CartContext = createContext();
 
 
-const BASE_URL = "https://levelupapi-production.up.railway.app";
+const BASE_URL = "http://localhost:8080";
 
 export function CartProvider({ children }) {
   const [productosSource, setProductosSource] = useState([]);

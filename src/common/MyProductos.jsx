@@ -17,16 +17,36 @@ export default function Productos() {
   const cargarProductos = async () => {
     try {
       setLoading(true);
+      console.log('🔄 Iniciando carga de productos...');
       
       const API_URL = 'http://localhost:8080';
       
       // Llamadas paralelas a todas las APIs
       const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
-        axios.get(`${API_URL}/audifono`).catch(() => ({ data: [] })),
-        axios.get(`${API_URL}/mouse`).catch(() => ({ data: [] })),
-        axios.get(`${API_URL}/teclado`).catch(() => ({ data: [] })),
-        axios.get(`${API_URL}/notebook`).catch(() => ({ data: [] }))
+        axios.get(`${API_URL}/audifono`).catch(err => {
+          console.error('❌ Error audifono:', err.message);
+          return { data: [] };
+        }),
+        axios.get(`${API_URL}/mouse`).catch(err => {
+          console.error('❌ Error mouse:', err.message);
+          return { data: [] };
+        }),
+        axios.get(`${API_URL}/teclado`).catch(err => {
+          console.error('❌ Error teclado:', err.message);
+          return { data: [] };
+        }),
+        axios.get(`${API_URL}/notebook`).catch(err => {
+          console.error('❌ Error notebook:', err.message);
+          return { data: [] };
+        })
       ]);
+
+      console.log('📦 Respuestas recibidas:', {
+        audifonos: audifonosRes.data.length,
+        mouse: mouseRes.data.length,
+        teclados: tecladosRes.data.length,
+        notebooks: notebooksRes.data.length
+      });
 
       // Combinar todos los productos
       const todosProductos = [
@@ -36,12 +56,14 @@ export default function Productos() {
         ...notebooksRes.data
       ];
 
+      console.log('✅ Total productos cargados:', todosProductos.length);
       setProductos(todosProductos);
       setError(null);
     } catch (err) {
-      console.error('Error al cargar productos:', err);
+      console.error('💥 Error general al cargar productos:', err);
       setError('Error al cargar productos desde el servidor');
     } finally {
+      console.log('🏁 Finalizando carga, setLoading(false)');
       setLoading(false);
     }
   };
