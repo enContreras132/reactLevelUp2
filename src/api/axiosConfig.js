@@ -10,7 +10,13 @@ const api = axios.create({
 // Esto intercepta todas las peticiones y les pega el token si existe
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
+        if (typeof token === 'string') {
+            // limpiar comillas, saltos de línea y espacios accidentales
+            token = token.replace(/^\s+|\s+$/g, '');
+            token = token.replace(/^"|"$/g, '');
+            token = token.replace(/\r|\n/g, '');
+        }
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
