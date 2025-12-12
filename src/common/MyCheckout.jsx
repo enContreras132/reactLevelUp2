@@ -168,9 +168,9 @@ export default function Checkout() {
 										<li key={it.id} className="list-group-item d-flex justify-content-between align-items-center">
 											<div>
 												<div className="fw-semibold">{it.nombre}</div>
-												<small className="text-muted">x{it.qty || 1}</small>
+												<small className="text-muted">x{it.cantidad || it.qty || 1}</small>
 											</div>
-											<span>${(((it.qty || 1) * (it.precio || 0))).toLocaleString('es-CL')}</span>
+											<span>${(((it.cantidad || it.qty || 1) * (it.precio || 0))).toLocaleString('es-CL')}</span>
 										</li>
 									))}
 								</ul>

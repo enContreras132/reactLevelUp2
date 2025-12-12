@@ -48,13 +48,10 @@ export function CartProvider({ children }) {
       return parsed
         .map((it) => {
           if (!it) return null;
-          const cantidad = it.cantidad ?? it.cantidad ?? it.cantidadProducto ?? 1;
-          if (it.id) return { ...it, cantidad: cantidad };
-          if (it.nombre) {
-            const prod = productosSource.find((p) => p.nombre === it.nombre || String(p.id) === String(it.id));
-            if (prod) return { id: prod.id, nombre: prod.nombre, precio: prod.precio, imagen: prod.imagen, cantidad: cantidad };
-            return { id: it.nombre, nombre: it.nombre, precio: it.precio ?? 0, imagen: it.imagen ?? '', cantidad: cantidad };
-          }
+          // normalizar cantidad y id (acepta diferentes formas de key)
+          const cantidad = it.cantidad ?? it.qty ?? it.cantidadProducto ?? 1;
+          const id = it.id ?? it._id ?? it.nombre ?? null;
+          if (id) return { ...it, id, cantidad };
           return null;
         })
         .filter(Boolean);
@@ -73,20 +70,22 @@ export function CartProvider({ children }) {
 
   const addItem = (product, cantidad = 1) => {
     setItems((cur) => {
-      const found = cur.find((i) => String(i.id) === String(product.id));
+      const prodId = product.id ?? product._id ?? product.nombre ?? null;
+      const found = cur.find((i) => String(i.id ?? i._id ?? '') === String(prodId));
       if (found) {
-        return cur.map((i) => (String(i.id) === String(product.id) ? { ...i, cantidad: (i.cantidad || 1) + cantidad } : i));
+        return cur.map((i) => (String(i.id ?? i._id ?? '') === String(prodId) ? { ...i, cantidad: (i.cantidad || i.qty || 1) + cantidad } : i));
       }
-      return [...cur, { ...product, cantidad: cantidad }];
+      // añadir item normalizando la propiedad id y cantidad
+      return [...cur, { ...(product || {}), id: prodId, cantidad: cantidad }];
     });
   };
 
-  const removeItem = (id) => setItems((cur) => cur.filter((i) => String(i.id) !== String(id)));
+  const removeItem = (id) => setItems((cur) => cur.filter((i) => String(i.id ?? i._id ?? '') !== String(id)));
   const updateCantidad = (id, cantidad) =>
-    setItems((cur) => cur.map((i) => (String(i.id) === String(id) ? { ...i, cantidad } : i)));
+    setItems((cur) => cur.map((i) => (String(i.id ?? i._id ?? '') === String(id) ? { ...i, cantidad } : i)));
   const clear = () => setItems([]);
-  const total = items.reduce((s, i) => s + (i.precio || 0) * (i.cantidad || 1), 0);
-  const count = items.reduce((s, i) => s + (i.cantidad || 1), 0);
+  const total = items.reduce((s, i) => s + (i.precio || i.price || 0) * (i.cantidad || i.qty || 1), 0);
+  const count = items.reduce((s, i) => s + (Number(i.cantidad ?? i.qty ?? 1) || 0), 0);
   
   return (
     <CartContext.Provider value={{ items, addItem, removeItem, updateCantidad, clear, total, count }}>

@@ -52,7 +52,7 @@ export default function Cart() {
                         {it.descripcion ? it.descripcion.substring(0, 120) + (it.descripcion.length > 120 ? '...' : '') : ''}
                       </p>
                       <div className="d-flex align-items-center gap-2 mt-2">
-                        <span className="fw-bold text-white">${((it.precio || 0) * (it.qty || 1)).toLocaleString('es-CL')}</span>
+                        <span className="fw-bold text-white">${((it.precio || 0) * (it.cantidad || 1)).toLocaleString('es-CL')}</span>
                         <small className="text-light">(${(it.precio || 0).toLocaleString('es-CL')} c/u)</small>
                       </div>
                     </div>
@@ -69,7 +69,7 @@ export default function Cart() {
                           </button>
                           <input
                             className="form-control text-center bg-white"
-                            value={it.qty || 1}
+                            value={it.cantidad || 1}
                             readOnly
                             aria-label="cantidad"
                           />
