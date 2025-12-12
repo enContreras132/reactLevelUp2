@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
+import AdminChart from './AdminChart';
 import Soloaudifonos from './MySoloaudifonos';
 import Solomouse from './MySolomouse';
 import Soloteclado from './MySoloteclado';
@@ -26,6 +27,10 @@ export default function Admin() {
   const [showDeleteUserForm, setShowDeleteUserForm] = useState(false);
   const [newUser, setNewUser] = useState({});
   const [deleteUserId, setDeleteUserId] = useState('');
+
+  // Pedidos y productos para dashboard
+  const [pedidosList, setPedidosList] = useState([]);
+  const [productosForChart, setProductosForChart] = useState([]);
 
   useEffect(() => {
     // Intentar leer sessionStorage primero, si no existe intentar localStorage
@@ -59,6 +64,53 @@ export default function Admin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // cargar pedidos desde localStorage
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('pedidos');
+      if (raw) setPedidosList(JSON.parse(raw));
+    } catch (e) {
+      console.error('Error leyendo pedidos desde localStorage', e);
+    }
+  }, []);
+
+  const savePedidos = (list) => {
+    try {
+      setPedidosList(list);
+      localStorage.setItem('pedidos', JSON.stringify(list));
+    } catch (e) {
+      console.error('Error guardando pedidos', e);
+    }
+  };
+
+  const updatePedidoStatus = (id, nuevoEstado) => {
+    const updated = pedidosList.map((p) => (String(p.id) === String(id) ? { ...p, estado: nuevoEstado } : p));
+    savePedidos(updated);
+    setSuccessMessage('Estado del pedido actualizado');
+    setTimeout(() => setSuccessMessage(''), 2500);
+  };
+
+  // cargar productos para gráfico (para mostrar stock por categoría)
+  useEffect(() => {
+    let mounted = true;
+    const cargar = async () => {
+      try {
+        const [audRes, mouseRes, teclRes, noteRes] = await Promise.all([
+          api.get('/audifono').catch(() => ({ data: [] })),
+          api.get('/mouse').catch(() => ({ data: [] })),
+          api.get('/teclado').catch(() => ({ data: [] })),
+          api.get('/notebook').catch(() => ({ data: [] })),
+        ]);
+        const todos = [...audRes.data, ...mouseRes.data, ...teclRes.data, ...noteRes.data];
+        if (mounted) setProductosForChart(todos);
+      } catch (err) {
+        console.error('Error cargando productos para gráfico:', err);
+      }
+    };
+    cargar();
+    return () => { mounted = false; };
+  }, []);
+
   function handleLogout(e) {
     if (e && e.preventDefault) e.preventDefault();
     // Limpiar ambas fuentes de sesión para evitar inconsistencias
@@ -74,6 +126,28 @@ export default function Admin() {
         <div className="alert" style={{ backgroundColor: '#343a40', borderColor: '#00ffea', color: '#00ffea' }}>
           <h4>¡Bienvenido de vuelta, {currentUser?.nombre}!</h4>
           <p>Este es tu centro de control. Selecciona una opción del menú de la izquierda para empezar a gestionar la tienda.</p>
+        </div>
+
+        <div className="row">
+          <div className="col-12 col-lg-8 mb-4">
+            <div className="card" style={{ background: '#071021', border: '1px solid rgba(255,255,255,0.04)' }}>
+              <div className="card-body">
+                <h5 className="card-title text-light">Stock por categoría</h5>
+                <AdminChart products={productosForChart} width={720} />
+              </div>
+            </div>
+          </div>
+
+          <div className="col-12 col-lg-4 mb-4">
+            <div className="card" style={{ background: '#071021', border: '1px solid rgba(255,255,255,0.04)' }}>
+              <div className="card-body text-light">
+                <h5 className="card-title">Resumen rápido</h5>
+                <p>Total categorías: <strong>{[...new Set(productosForChart.map(p => p.categoria || p.category || p.tipo || 'Sin categoría'))].length}</strong></p>
+                <p>Total productos: <strong>{productosForChart.length}</strong></p>
+                <p>Productos con stock 0: <strong>{productosForChart.filter(p => Number(p.stock ?? p.cantidad ?? p.qty ?? 0) <= 0).length}</strong></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -530,6 +604,69 @@ export default function Admin() {
   }
 
   // pedidos view removed — table intentionally omitted
+
+  function renderPedidos() {
+    const estados = ['Pendiente', 'Procesando', 'Enviado', 'Entregado', 'Cancelado'];
+
+    const handleChangeEstado = (id, e) => {
+      updatePedidoStatus(id, e.target.value);
+    };
+
+    return (
+      <div>
+        <h2 className="mb-4">Gestión de Pedidos</h2>
+
+        {successMessage && (
+          <div className="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{successMessage}</strong>
+            <button type="button" className="btn-close" onClick={() => setSuccessMessage('')} aria-label="Close"></button>
+          </div>
+        )}
+
+        <div className="card" style={{ backgroundColor: '#0f1724', border: '1px solid rgba(255,255,255,0.04)' }}>
+          <div className="card-body">
+            <div className="table-responsive">
+              <table className="table table-dark table-striped table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pedidosList.length === 0 && (
+                    <tr><td colSpan={6} className="text-center">No hay pedidos registrados</td></tr>
+                  )}
+                  {pedidosList.map(p => (
+                    <tr key={p.id}>
+                      <td>{p.id}</td>
+                      <td>{p.cliente?.nombre || p.cliente || '—'}</td>
+                      <td>{p.fecha || p.createdAt || '—'}</td>
+                      <td style={{ minWidth: 180 }}>
+                        <select className="form-select form-select-sm" value={p.estado} onChange={(e) => handleChangeEstado(p.id, e)}>
+                          {estados.map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </td>
+                      <td>{p.total != null ? `$ ${p.total}` : (p.items ? `$ ${p.items.reduce((a,b)=>a+(b.precio*(b.cantidad||b.qty||1)),0)}` : '—')}</td>
+                      <td>
+                        <button className="btn btn-sm btn-outline-info" onClick={() => { navigator.clipboard?.writeText(JSON.stringify(p)); setSuccessMessage('Pedido copiado al portapapeles'); setTimeout(()=>setSuccessMessage(''),2000); }}>
+                          Copiar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   function renderUsuarios() {
     const handleAddUser = async (e) => {
