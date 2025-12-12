@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
+import axios from 'axios';
 import AdminChart from './AdminChart';
 import Soloaudifonos from './MySoloaudifonos';
 import Solomouse from './MySolomouse';
@@ -686,7 +687,7 @@ export default function Admin() {
           rol: 'cliente'
         };
 
-        const response = await api.post('/usuario', userData);
+        const response = await api.post('/cliente', userData);
         
         console.log('Usuario creado:', response.data);
         setSuccessMessage('Cliente agregado correctamente');
@@ -719,51 +720,74 @@ export default function Admin() {
       }
     };
 
+    // helper que elimina por id (usa axios directo para hacer petición completa)
+    const deleteUserById = async (id, tipo = 'cliente') => {
+      try {
+        const rawToken = localStorage.getItem('token');
+        const token = typeof rawToken === 'string'
+          ? rawToken.replace(/^\s+|\s+$/g, '').replace(/^"|"$/g, '').replace(/\r|\n/g, '')
+          : rawToken;
+
+        if (!token) throw new Error('NO_TOKEN');
+
+        // construir path: la API usa /cliente/:id
+        const path = `/cliente/${id}`;
+        const base = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        const url = `${base}${path}`;
+
+        const res = await axios.delete(url, { headers: { Authorization: `Bearer ${token}` } });
+        return res;
+      } catch (err) {
+        throw err;
+      }
+    };
+
     const handleDeleteUser = async (e) => {
       e.preventDefault();
-      
+
       if (!deleteUserId) {
         setErrorMessage('Por favor ingresa el ID del usuario');
         setTimeout(() => setErrorMessage(''), 5000);
         return;
       }
 
-      if (!window.confirm(`¿Estás seguro de eliminar el usuario con ID ${deleteUserId}?`)) {
-        return;
-      }
+      if (!window.confirm(`¿Estás seguro de eliminar el usuario con ID ${deleteUserId}?`)) return;
 
       try {
-        await api.delete(`/usuario/${deleteUserId}`);
-        
+        await deleteUserById(deleteUserId, 'cliente');
         setSuccessMessage('Usuario eliminado correctamente');
         setErrorMessage('');
-        
         setShowDeleteUserForm(false);
         setDeleteUserId('');
-        
+
         setView('dashboard');
         setTimeout(() => {
           setView('usuarios');
           setTimeout(() => setSuccessMessage(''), 5000);
         }, 100);
-        
       } catch (error) {
         console.error('Error al eliminar usuario:', error);
         setSuccessMessage('');
-        
-        if (error.response) {
-          if (error.response.status === 404) {
+
+        if (error.message === 'NO_TOKEN') {
+          setErrorMessage('No se encontró token de autenticación. Vuelve a iniciar sesión.');
+        } else if (error.response) {
+          if (error.response.status === 403) {
+            const rolActual = currentUser?.rol || 'desconocido';
+            setErrorMessage(`No autorizado (403). Tu rol: ${rolActual}. Verifica que estés autenticado como admin y que el token sea válido.`);
+          } else if (error.response.status === 404) {
             setErrorMessage('Error: Usuario no encontrado');
           } else {
-            setErrorMessage(`Error al eliminar el usuario: ${error.response.data.message || error.response.statusText}`);
+            const serverMsg = error.response.data?.message || error.response.statusText || String(error.response.status);
+            setErrorMessage(`Error al eliminar el usuario: ${serverMsg}`);
           }
         } else if (error.request) {
           setErrorMessage('Error: No se pudo conectar con el servidor.');
         } else {
           setErrorMessage(`Error: ${error.message}`);
         }
-        
-        setTimeout(() => setErrorMessage(''), 5000);
+
+        setTimeout(() => setErrorMessage(''), 7000);
       }
     };
 

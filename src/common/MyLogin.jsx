@@ -47,7 +47,12 @@ export default function Login() {
       }
 
       // Guardar el token y los datos del usuario
-      localStorage.setItem('token', userData.token);
+     
+      const rawToken = userData.token;
+      const cleanToken = typeof rawToken === 'string'
+        ? rawToken.replace(/^\s+|\s+$/g, '').replace(/^"|"$/g, '').replace(/\r|\n/g, '')
+        : String(rawToken);
+      localStorage.setItem('token', cleanToken);
       
       const userPayload = {
         id: userData.id,
