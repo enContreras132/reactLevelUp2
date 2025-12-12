@@ -687,7 +687,7 @@ export default function Admin() {
           rol: 'cliente'
         };
 
-        const response = await api.post('/usuario', userData);
+        const response = await api.post('/cliente', userData);
         
         console.log('Usuario creado:', response.data);
         setSuccessMessage('Cliente agregado correctamente');
