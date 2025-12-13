@@ -49,6 +49,7 @@ function App() {
         <Route path="/sobrenosotros" element={<AboutPage />} />
         <Route path="/mouse/:id" element={<SingleProduct />} />
         <Route path="/audifono/:id" element={<SingleProduct />} />
+        <Route path="/audifonos/:id" element={<SingleProduct />} />
         <Route path="/teclado/:id" element={<SingleProduct />} />
         <Route path="/notebook/:id" element={<SingleProduct />} />
         <Route path="/cart" element={<CartPage />} />

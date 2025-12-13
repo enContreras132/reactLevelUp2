@@ -35,9 +35,15 @@ function SingleProduct() {
         
         // Extraer la categoría de la URL (ej: /mouse/1 -> "mouse")
         const pathParts = location.pathname.split('/');
-        const categoria = pathParts[1];
+        let categoria = pathParts[1];
         
-        console.log('- Categoría extraída:', categoria);
+        // Normalizar plural a singular para endpoints
+        if (categoria === 'audifonos') {
+          categoria = 'audifono';
+        }
+        
+        console.log('- Categoría extraída:', pathParts[1]);
+        console.log('- Categoría normalizada:', categoria);
         console.log('- URL a llamar:', `${API_BASE}/${categoria}/${id}`);
         
         // Buscar el producto en el endpoint de su categoría
