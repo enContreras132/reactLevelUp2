@@ -3,6 +3,18 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 
+// Función para truncar texto HTML
+const truncateHTML = (html, maxLength = 100) => {
+  if (!html) return '';
+  // Crear un elemento temporal para extraer solo el texto
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  const text = tempDiv.textContent || tempDiv.innerText || '';
+  
+  if (text.length <= maxLength) return html;
+  return text.substring(0, maxLength) + '<br><br> <strong>Presionar "ver producto" para más detalles...</strong>';
+};
+
 export default function Productos() {
   const { addItem } = useCart();
   const [categoria, setCategoria] = useState("todos");
@@ -144,17 +156,16 @@ export default function Productos() {
                       }}
                     />
                   </div>
-                  <div className="detail-box flex-grow-1 d-flex flex-column">
+                  <div className="detail-box flex-grow-1 d-flex flex-column justify-content-space-around">
                     <h5>{p.nombre}</h5>
-                    {p.descripcion && <p>{p.descripcion}</p>}
-                    <div className="options mt-auto">
-                      <h6>${(p.precio || 0).toLocaleString('es-CL')}</h6>
+                    {p.descripcion && <p dangerouslySetInnerHTML={{ __html: truncateHTML(p.descripcion, 140) }}></p>}
+                    <div className="options mt-auto d-flex flex-wrap gap-2 align-items-center">
+                      <h6 className="btn btn-secondary mt-0">${(p.precio || 0).toLocaleString('es-CL')}</h6>
                       <Link to={`/${p.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}/${encodeURIComponent(p.id)}`} className='btn btn-secondary'>Ver producto</Link>
                       <button
                         type="button"
                         className="btn btn-primary"
                         onClick={() => addItem(p, 1)}
-                        style={{ marginLeft: 8 }}
                       >
                         Añadir
                       </button>

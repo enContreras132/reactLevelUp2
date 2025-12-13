@@ -122,7 +122,7 @@ function SingleProduct() {
               </div>
             )}
             {product.descripcion && (
-              <p className="text-white mb-3">{product.descripcion}</p>
+              <p className="text-white mb-3" dangerouslySetInnerHTML={{ __html: product.descripcion }}></p>
             )}
 
             {Array.isArray(product.caracteristicas) && product.caracteristicas.length > 0 && (
