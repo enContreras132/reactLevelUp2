@@ -74,7 +74,7 @@ const Solomouse = () => {
                                     <td className="text-center">{producto.dpi || 'N/A'}</td>
                                     <td className="text-center">{producto.dpiMin || 'N/A'}</td>
                                     <td className="text-center">{producto.dpiMax || 'N/A'}</td>
-                                    <td>{producto.descripcion || 'N/A'}</td>
+                                    <td dangerouslySetInnerHTML={{ __html: producto.descripcion || 'N/A' }}></td>
                                     <td>
                                         {producto.urlImagen && producto.urlImagen.startsWith('http') ? (
                                             <img 

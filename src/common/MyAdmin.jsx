@@ -9,6 +9,7 @@ import Soloteclado from './MySoloteclado';
 import Solonotebook from './MySolonotebook';
 import Soloclientes from './MySoloclientes';
 import Soloadmin from './MySoloadmin';
+import Solopedidos from './MySolopedidos';
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -24,9 +25,7 @@ export default function Admin() {
   const [errorMessage, setErrorMessage] = useState('');
   
   // Estados para gestión de usuarios
-  const [showAddUserForm, setShowAddUserForm] = useState(false);
   const [showDeleteUserForm, setShowDeleteUserForm] = useState(false);
-  const [newUser, setNewUser] = useState({});
   const [deleteUserId, setDeleteUserId] = useState('');
 
   // Pedidos y productos para dashboard
@@ -604,122 +603,15 @@ export default function Admin() {
     );
   }
 
-  // pedidos view removed — table intentionally omitted
-
   function renderPedidos() {
-    const estados = ['Pendiente', 'Procesando', 'Enviado', 'Entregado', 'Cancelado'];
-
-    const handleChangeEstado = (id, e) => {
-      updatePedidoStatus(id, e.target.value);
-    };
-
     return (
       <div>
-        <h2 className="mb-4">Gestión de Pedidos</h2>
-
-        {successMessage && (
-          <div className="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{successMessage}</strong>
-            <button type="button" className="btn-close" onClick={() => setSuccessMessage('')} aria-label="Close"></button>
-          </div>
-        )}
-
-        <div className="card" style={{ backgroundColor: '#0f1724', border: '1px solid rgba(255,255,255,0.04)' }}>
-          <div className="card-body">
-            <div className="table-responsive">
-              <table className="table table-dark table-striped table-hover align-middle">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th>Total</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pedidosList.length === 0 && (
-                    <tr><td colSpan={6} className="text-center">No hay pedidos registrados</td></tr>
-                  )}
-                  {pedidosList.map(p => (
-                    <tr key={p.id}>
-                      <td>{p.id}</td>
-                      <td>{p.cliente?.nombre || p.cliente || '—'}</td>
-                      <td>{p.fecha || p.createdAt || '—'}</td>
-                      <td style={{ minWidth: 180 }}>
-                        <select className="form-select form-select-sm" value={p.estado} onChange={(e) => handleChangeEstado(p.id, e)}>
-                          {estados.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
-                      </td>
-                      <td>{p.total != null ? `$ ${p.total}` : (p.items ? `$ ${p.items.reduce((a,b)=>a+(b.precio*(b.cantidad||b.qty||1)),0)}` : '—')}</td>
-                      <td>
-                        <button className="btn btn-sm btn-outline-info" onClick={() => { navigator.clipboard?.writeText(JSON.stringify(p)); setSuccessMessage('Pedido copiado al portapapeles'); setTimeout(()=>setSuccessMessage(''),2000); }}>
-                          Copiar
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <Solopedidos />
       </div>
     );
   }
 
   function renderUsuarios() {
-    const handleAddUser = async (e) => {
-      e.preventDefault();
-      
-      // Validación básica
-      if (!newUser.nombre || !newUser.correo || !newUser.contraseña) {
-        setErrorMessage('Por favor completa los campos obligatorios: nombre, correo y contraseña');
-        setTimeout(() => setErrorMessage(''), 5000);
-        return;
-      }
-
-      try {
-        // Agregar rol de cliente por defecto
-        const userData = {
-          ...newUser,
-          rol: 'cliente'
-        };
-
-        const response = await api.post('/cliente', userData);
-        
-        console.log('Usuario creado:', response.data);
-        setSuccessMessage('Cliente agregado correctamente');
-        setErrorMessage('');
-        
-        // Resetear formulario
-        setShowAddUserForm(false);
-        setNewUser({});
-        
-        // Recargar vista
-        setView('dashboard');
-        setTimeout(() => {
-          setView('usuarios');
-          setTimeout(() => setSuccessMessage(''), 5000);
-        }, 100);
-        
-      } catch (error) {
-        console.error('Error al crear usuario:', error);
-        setSuccessMessage('');
-        
-        if (error.response) {
-          setErrorMessage(`Error al guardar el usuario: ${error.response.data.message || error.response.statusText}`);
-        } else if (error.request) {
-          setErrorMessage('Error: No se pudo conectar con el servidor.');
-        } else {
-          setErrorMessage(`Error: ${error.message}`);
-        }
-        
-        setTimeout(() => setErrorMessage(''), 5000);
-      }
-    };
-
     // helper que elimina por id (usa axios directo para hacer petición completa)
     const deleteUserById = async (id, tipo = 'cliente') => {
       try {
@@ -791,10 +683,6 @@ export default function Admin() {
       }
     };
 
-    const handleUserInputChange = (campo, valor) => {
-      setNewUser(prev => ({ ...prev, [campo]: valor }));
-    };
-
     return (
       <div>
         <h2 className="mb-4">Gestión de Usuarios</h2>
@@ -825,151 +713,15 @@ export default function Admin() {
         )}
 
         {/* Botones de acción */}
-        <div className="d-flex justify-content-between align-items-center mb-4 gap-2">
-          <button 
-            className="btn btn-success"
-            onClick={() => {
-              setShowAddUserForm(!showAddUserForm);
-              if (showDeleteUserForm) setShowDeleteUserForm(false);
-            }}
-          >
-            <i className="bi bi-plus-lg me-1"></i>
-            {showAddUserForm ? 'Cancelar' : 'Agregar Cliente'}
-          </button>
+        <div className="mb-4">
           <button 
             className="btn btn-danger"
-            onClick={() => {
-              setShowDeleteUserForm(!showDeleteUserForm);
-              if (showAddUserForm) setShowAddUserForm(false);
-            }}
+            onClick={() => setShowDeleteUserForm(!showDeleteUserForm)}
           >
             <i className="bi bi-trash me-1"></i>
             {showDeleteUserForm ? 'Cancelar' : 'Eliminar Usuario'}
           </button>
         </div>
-
-        {/* Formulario agregar cliente */}
-        {showAddUserForm && (
-          <div className="card mb-4" style={{ backgroundColor: '#1a1f2e', border: '1px solid #00ffea' }}>
-            <div className="card-body">
-              <h5 className="card-title text-light mb-3">Nuevo Cliente</h5>
-              
-              <form onSubmit={handleAddUser}>
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Nombre *</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={newUser.nombre || ''}
-                      onChange={(e) => handleUserInputChange('nombre', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Apellido</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={newUser.apellido || ''}
-                      onChange={(e) => handleUserInputChange('apellido', e.target.value)}
-                    />
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Correo *</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      value={newUser.correo || ''}
-                      onChange={(e) => handleUserInputChange('correo', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Usuario</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={newUser.usuario || ''}
-                      onChange={(e) => handleUserInputChange('usuario', e.target.value)}
-                    />
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Contraseña *</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      value={newUser.contraseña || ''}
-                      onChange={(e) => handleUserInputChange('contraseña', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Teléfono</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={newUser.telefono || ''}
-                      onChange={(e) => handleUserInputChange('telefono', e.target.value)}
-                    />
-                  </div>
-                  
-                  <div className="col-12">
-                    <label className="form-label text-light">Dirección</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={newUser.direccion || ''}
-                      onChange={(e) => handleUserInputChange('direccion', e.target.value)}
-                    />
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Comuna</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={newUser.comuna || ''}
-                      onChange={(e) => handleUserInputChange('comuna', e.target.value)}
-                    />
-                  </div>
-                  
-                  <div className="col-md-6">
-                    <label className="form-label text-light">Región</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={newUser.region || ''}
-                      onChange={(e) => handleUserInputChange('region', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-4 d-flex gap-2">
-                  <button type="submit" className="btn btn-primary">
-                    <i className="bi bi-save me-1"></i>
-                    Guardar Cliente
-                  </button>
-                  <button 
-                    type="button" 
-                    className="btn btn-outline-secondary"
-                    onClick={() => {
-                      setShowAddUserForm(false);
-                      setNewUser({});
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
         {/* Formulario eliminar usuario */}
         {showDeleteUserForm && (
@@ -1055,7 +807,13 @@ export default function Admin() {
             </li>
           )}
 
-          {/* Pedidos removed from sidebar per request */}
+          {rol === 'admin' && (
+            <li>
+              <a href="#pedidos" className={`nav-link ${view === 'pedidos' ? 'active' : 'text-white'}`} onClick={(e) => { e.preventDefault(); setView('pedidos'); }}>
+                <i className="bi bi-cart-check me-2"></i> Pedidos
+              </a>
+            </li>
+          )}
 
           {rol === 'admin' && (
             <li>
@@ -1083,12 +841,16 @@ export default function Admin() {
 
       <main id="main-content" className="flex-grow-1 p-4" style={{ minHeight: '100vh', background: '#071021' }}>
         <h1 id="content-title" className="text-light mb-3">
-          {view === 'dashboard' ? 'Dashboard' : view === 'productos' ? 'Gestión de Productos' : 'Gestión de Usuarios'}
+          {view === 'dashboard' ? 'Dashboard' : 
+           view === 'productos' ? 'Gestión de Productos' : 
+           view === 'pedidos' ? 'Gestión de Pedidos' :
+           'Gestión de Usuarios'}
         </h1>
 
         <div id="content-area" className="text-light">
           {view === 'dashboard' && renderDashboard()}
           {view === 'productos' && renderProductos()}
+          {view === 'pedidos' && renderPedidos()}
           {view === 'usuarios' && renderUsuarios()}
         </div>
       </main>

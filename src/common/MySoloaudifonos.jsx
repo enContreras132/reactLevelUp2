@@ -68,7 +68,7 @@ const Soloaudifonos = () => {
                                     <td className="text-center">
                                         {producto.botonesCant || producto['cantidad de botones'] || producto.cantidadDeBotones || 'N/A'}
                                     </td>
-                                    <td>{producto.descripcion || 'N/A'}</td>
+                                    <td dangerouslySetInnerHTML={{ __html: producto.descripcion || 'N/A' }}></td>
                                     <td>
                                         {producto.urlImagen && producto.urlImagen.startsWith('http') ? (
                                             <img 

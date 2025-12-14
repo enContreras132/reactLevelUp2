@@ -68,7 +68,7 @@ const Soloteclado = () => {
                                     <td>{producto.color}</td>
                                     <td>{producto.dimension || producto.dimensiones || 'N/A'}</td>
                                     <td>{producto.switch || producto.switchTeclado || 'N/A'}</td>
-                                    <td>{producto.descripcion || 'N/A'}</td>
+                                    <td dangerouslySetInnerHTML={{ __html: producto.descripcion || 'N/A' }}></td>
                                     <td>
                                         {producto.urlImagen && producto.urlImagen.startsWith('http') ? (
                                             <img 

@@ -38,7 +38,11 @@ const Soloclientes = () => {
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th>
+                                <th>RUT</th>
+                                <th>Teléfono</th>
                                 <th>Correo</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Comuna</th>
                                 <th>Rol</th>
                             </tr>
                         </thead>
@@ -49,9 +53,18 @@ const Soloclientes = () => {
                                 <tr key={usuario.id || index}>
                                     <td>{usuario.id}</td>
                                     <td>{usuario.nombre}</td>
+                                    <td>{usuario.rut || '-'}</td>
+                                    <td>{usuario.telefono || '-'}</td>
                                     <td>{usuario.correo}</td>
                                     <td>
-                                        <span className="badge bg-info">
+                                        {usuario.fechaNacimiento 
+                                            ? new Date(usuario.fechaNacimiento).toLocaleDateString('es-CL')
+                                            : '-'
+                                        }
+                                    </td>
+                                    <td>{usuario.comuna?.nombre || '-'}</td>
+                                    <td>
+                                        <span className={`badge ${usuario.rol === 'admin' ? 'bg-danger' : 'bg-info'}`}>
                                             {usuario.rol || 'cliente'}
                                         </span>
                                     </td>

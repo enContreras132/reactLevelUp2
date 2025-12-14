@@ -70,7 +70,7 @@ const Solonotebook = () => {
                                     <td>{producto.memoria || 'N/A'}</td>
                                     <td>{producto.pantalla || 'N/A'}</td>
                                     <td>{producto.tarjetaGrafica || 'N/A'}</td>
-                                    <td>{producto.descripcion || 'N/A'}</td>
+                                    <td dangerouslySetInnerHTML={{ __html: producto.descripcion || 'N/A' }}></td>
                                     <td>
                                         {producto.urlImagen && producto.urlImagen.startsWith('http') ? (
                                             <img 

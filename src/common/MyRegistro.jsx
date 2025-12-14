@@ -84,22 +84,68 @@ function Registro() {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (validateAllFields()) {
-            const user = {
-                id: `cli-${Date.now()}`,
-                nombre: formData.nombre,
-                email: formData.mail,
-                rol: 'cliente',
-            };
             try {
-                sessionStorage.setItem('currentUser', JSON.stringify(user));
-            } catch {}
-            // Opcional: redirige de vuelta al checkout
-            navigate('/checkout', { replace: true });
-            resetForm(); // Si quieres limpiar el form
+                // Buscar el ID de la comuna seleccionada
+                const comunaSeleccionada = comunasFiltradas.find(
+                    comuna => comuna.nombre === formData.direccion
+                );
+                
+                if (!comunaSeleccionada) {
+                    alert('Error: Comuna no válida. Por favor selecciona una comuna nuevamente.');
+                    return;
+                }
+
+                // Preparar datos para el backend según ClienteModel
+                const clienteData = {
+                    nombre: formData.nombre,
+                    rut: formData.rut,
+                    telefono: formData.telefono,
+                    correo: formData.mail,
+                    fechaNacimiento: formData.nacimiento,
+                    contraseña: formData.password,
+                    rol: 'cliente',
+                    comuna: {
+                        id: comunaSeleccionada.id
+                    }
+                };
+
+                console.log('Enviando datos:', clienteData);
+
+                // Hacer POST request al backend
+                const response = await axios.post('http://localhost:8080/cliente', clienteData);
+                
+                console.log('Cliente registrado exitosamente:', response.data);
+                
+                // Mostrar mensaje de éxito
+                alert('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
+                
+                // Limpiar formulario
+                resetForm();
+                
+                // Redirigir al login
+                navigate('/login', { replace: true });
+                
+            } catch (error) {
+                console.error('Error al registrar cliente:', error);
+                
+                if (error.response) {
+                    // El servidor respondió con un código de error
+                    const errorMsg = error.response.data.message || error.response.statusText;
+                    alert(`Error al crear la cuenta: ${errorMsg}`);
+                } else if (error.request) {
+                    // La petición fue hecha pero no hubo respuesta
+                    alert('Error: No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
+                } else {
+                    // Algo pasó al configurar la petición
+                    alert(`Error: ${error.message}`);
+                }
+            }
+        } else {
+            alert('Por favor completa todos los campos correctamente antes de continuar.');
         }
     };
 
