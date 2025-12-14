@@ -75,8 +75,6 @@ const Ofertas = () => {
             </div>
           </div>
         </div>
-
-      </div>
     </section>
   );
 };

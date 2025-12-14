@@ -36,7 +36,7 @@ export default function Login() {
           password: formData.password
       });
 
-      // El backend devuelve: { token, rol, nombre, id }
+      // El backend devuelve: { token, rol, nombre, id, correo?, username? }
       const userData = loginResponse.data;
       console.log("Login exitoso, datos:", userData);
 
@@ -58,8 +58,8 @@ export default function Login() {
         id: userData.id,
         nombre: userData.nombre,
         rol: userData.rol,
-        // El backend solo devuelve estos campos básicos
-        // Si necesitas más datos, debes hacer otra petición o ampliar el backend
+        correo: userData.correo || userData.email || null,
+        username: userData.username || userData.usuario || null
       };
       
       localStorage.setItem('user', JSON.stringify(userPayload));

@@ -2,6 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
+// Función para truncar texto HTML
+const truncateHTML = (html, maxLength = 120) => {
+  if (!html) return '';
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  const text = tempDiv.textContent || tempDiv.innerText || '';
+  
+  if (text.length <= maxLength) return html;
+  return text.substring(0, maxLength) + '...';
+};
+
 export default function Cart() {
   const { items, updateCantidad, removeItem, clear, total, count } = useCart();
 
@@ -48,9 +59,9 @@ export default function Cart() {
 
                     <div className="col-8 col-sm-6 col-md-7">
                       <h5 className="mb-1 text-white">{it.nombre}</h5>
-                      <p className="mb-1 text-white small">
-                        {it.descripcion ? it.descripcion.substring(0, 120) + (it.descripcion.length > 120 ? '...' : '') : ''}
-                      </p>
+                      {it.descripcion && (
+                        <p className="mb-1 text-white small" dangerouslySetInnerHTML={{ __html: truncateHTML(it.descripcion, 120) }}></p>
+                      )}
                       <div className="d-flex align-items-center gap-2 mt-2">
                         <span className="fw-bold text-white">${((it.precio || 0) * (it.cantidad || 1)).toLocaleString('es-CL')}</span>
                         <small className="text-light">(${(it.precio || 0).toLocaleString('es-CL')} c/u)</small>
