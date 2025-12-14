@@ -14,7 +14,7 @@ export default function SearchDropdown({ items = null }) {
   useEffect(() => {
     const cargarProductos = async () => {
       try {
-        const API_BASE = 'http://localhost:8080';
+        const API_BASE = '/api';
         const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
           axios.get(`${API_BASE}/audifono`).catch(() => ({ data: [] })),
           axios.get(`${API_BASE}/mouse`).catch(() => ({ data: [] })),
@@ -47,7 +47,7 @@ export default function SearchDropdown({ items = null }) {
         p.marca?.toLowerCase().includes(q) ||
         p.categoria?.toLowerCase().includes(q)
       );
-      setResults(filtered.slice(0, 6)); // Mostrar máximo 6 resultados
+      setResults(filtered.slice(0, 6)); // Muestrar máximo 6 resultados
       setShowDropdown(filtered.length > 0);
     } else {
       setResults([]);
@@ -68,7 +68,9 @@ export default function SearchDropdown({ items = null }) {
   function onSelect(product) {
     setShowDropdown(false);
     setQuery('');
-    navigate(`/producto/${product.id}`);
+    
+    const categoria = product.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') || 'producto';
+    navigate(`/${categoria}/${product.id}`);
   }
 
   function handleSubmit(e) {
@@ -77,8 +79,10 @@ export default function SearchDropdown({ items = null }) {
     if (!q) return;
     
     if (results.length > 0) {
-      // Si hay resultados, ir al primero
-      navigate(`/producto/${results[0].id}`);
+      // Si hay resultados, ir al primero usando su categoría
+      const producto = results[0];
+      const categoria = producto.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') || 'producto';
+      navigate(`/${categoria}/${producto.id}`);
       setShowDropdown(false);
       setQuery('');
     }

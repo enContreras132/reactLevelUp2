@@ -31,7 +31,7 @@ function SingleProduct() {
       
       try {
         setLoading(true);
-        const API_BASE = 'http://localhost:8080';
+        const API_BASE = '/api';
         
         // Extraer la categoría de la URL (ej: /mouse/1 -> "mouse")
         const pathParts = location.pathname.split('/');

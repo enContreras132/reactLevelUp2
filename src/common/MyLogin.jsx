@@ -31,7 +31,7 @@ export default function Login() {
 
     try {
       // El backend espera 'username' y 'password' (busca por correo en la BD)
-      const loginResponse = await api.post('/usuario/login', {
+      const loginResponse = await api.post('/cliente/login', {
           username: formData.identifier, 
           password: formData.password
       });

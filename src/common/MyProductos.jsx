@@ -31,7 +31,7 @@ export default function Productos() {
       setLoading(true);
       console.log('🔄 Iniciando carga de productos...');
       
-      const API_URL = 'http://localhost:8080';
+      const API_URL = '/api';
       
       // Llamadas paralelas a todas las APIs
       const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([

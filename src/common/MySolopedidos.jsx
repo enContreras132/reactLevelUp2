@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/axiosConfig';
 
-const API_URL = 'http://localhost:8080';
+const API_URL = '/api';
 
 const Solopedidos = () => {
     const [pedidos, setPedidos] = useState([]);

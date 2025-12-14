@@ -16,8 +16,8 @@ function Registro() {
         const cargarDatos = async () => {
             try {
                 const [regionesRes, comunasRes] = await Promise.all([
-                    axios.get('http://localhost:8080/region').catch(() => ({ data: [] })),
-                    axios.get('http://localhost:8080/comuna').catch(() => ({ data: [] }))
+                    axios.get('/api/region').catch(() => ({ data: [] })),
+                    axios.get('/api/comuna').catch(() => ({ data: [] }))
                 ]);
                 
                 const regionesData = Array.isArray(regionesRes.data) ? regionesRes.data : [];
@@ -116,7 +116,7 @@ function Registro() {
                 console.log('Enviando datos:', clienteData);
 
                 // Hacer POST request al backend
-                const response = await axios.post('http://localhost:8080/cliente', clienteData);
+                const response = await axios.post('/api/cliente', clienteData);
                 
                 console.log('Cliente registrado exitosamente:', response.data);
                 

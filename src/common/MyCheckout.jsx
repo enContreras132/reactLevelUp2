@@ -33,8 +33,8 @@ export default function Checkout() {
 		const cargarDatos = async () => {
 			try {
 				const [regionesRes, comunasRes] = await Promise.all([
-					axios.get('http://localhost:8080/region').catch(() => ({ data: [] })),
-					axios.get('http://localhost:8080/comuna').catch(() => ({ data: [] }))
+					axios.get('/api/region').catch(() => ({ data: [] })),
+					axios.get('/api/comuna').catch(() => ({ data: [] }))
 				]);
 				
 				const regionesData = Array.isArray(regionesRes.data) ? regionesRes.data : [];
