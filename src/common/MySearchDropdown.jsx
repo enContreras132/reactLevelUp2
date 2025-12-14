@@ -6,12 +6,16 @@ export default function SearchDropdown({ items = null }) {
   const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const ref = useRef(null);
 
   useEffect(() => {
     const cargarProductos = async () => {
       try {
         const API_BASE = 'http://localhost:8080';
-      const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
+        const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
           axios.get(`${API_BASE}/audifono`).catch(() => ({ data: [] })),
           axios.get(`${API_BASE}/mouse`).catch(() => ({ data: [] })),
           axios.get(`${API_BASE}/teclado`).catch(() => ({ data: [] })),
@@ -34,19 +38,27 @@ export default function SearchDropdown({ items = null }) {
   }, []);
 
   const allItems = useMemo(() => (items ?? productos), [items, productos]);
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const ref = useRef(null);
 
   useEffect(() => {
     const q = query.trim().toLowerCase();
-    setResults(q ? allItems.filter(p => p.nombre.toLowerCase().includes(q)) : []);
+    if (q.length > 0) {
+      const filtered = allItems.filter(p => 
+        p.nombre?.toLowerCase().includes(q) || 
+        p.marca?.toLowerCase().includes(q) ||
+        p.categoria?.toLowerCase().includes(q)
+      );
+      setResults(filtered.slice(0, 6)); // Mostrar máximo 6 resultados
+      setShowDropdown(filtered.length > 0);
+    } else {
+      setResults([]);
+      setShowDropdown(false);
+    }
   }, [query, allItems]);
 
   useEffect(() => {
     function onDocClick(e) {
       if (ref.current && !ref.current.contains(e.target)) {
-        // noop
+        setShowDropdown(false);
       }
     }
     document.addEventListener('click', onDocClick);
@@ -54,23 +66,27 @@ export default function SearchDropdown({ items = null }) {
   }, []);
 
   function onSelect(product) {
-    setOpen(false);
+    setShowDropdown(false);
     setQuery('');
     navigate(`/producto/${product.id}`);
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    
+    if (results.length > 0) {
+      // Si hay resultados, ir al primero
+      navigate(`/producto/${results[0].id}`);
+      setShowDropdown(false);
+      setQuery('');
+    }
+  }
+
   return (
     <div ref={ref} className="site-search-container">
-      <form
-        className="site-search-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const q = query.trim();
-          if (!q) return;
-          const found = allItems.find(p => p.nombre.toLowerCase().includes(q.toLowerCase()));
-          if (found) navigate(`/producto/${found.id}`);
-        }}
-      >
+      <form className="site-search-form" onSubmit={handleSubmit}>
         <button type="submit" className="site-search-btn" aria-label="Buscar">
           <i className="fa fa-search"></i>
         </button>
@@ -80,8 +96,40 @@ export default function SearchDropdown({ items = null }) {
           placeholder="Busca los mejores productos y marcas :)"
           value={query}
           onChange={e => setQuery(e.target.value)}
+          onFocus={() => query.length > 0 && results.length > 0 && setShowDropdown(true)}
         />
       </form>
+      
+      {showDropdown && (
+        <div className="dropdown-menu-custom show">
+          {results.map((product) => (
+            <div
+              key={product.id}
+              className="dropdown-item-custom"
+              onClick={() => onSelect(product)}
+            >
+              <div className="search-result-item">
+                {product.imagen && (
+                  <img
+                    src={product.imagen}
+                    alt={product.nombre}
+                    className="search-result-img"
+                  />
+                )}
+                <div className="search-result-info">
+                  <div className="search-result-name">{product.nombre}</div>
+                  {product.marca && (
+                    <div className="search-result-brand">{product.marca}</div>
+                  )}
+                  <div className="search-result-price">
+                    ${product.precio?.toLocaleString('es-CL')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
