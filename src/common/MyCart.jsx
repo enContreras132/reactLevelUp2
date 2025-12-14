@@ -51,7 +51,7 @@ export default function Cart() {
                   <div className="row g-3 align-items-center">
                     <div className="col-4 col-sm-3 col-md-2">
                       <img
-                        src={it.imagen || 'https://via.placeholder.com/200x150?text=Sin+imagen'}
+                        src={it.urlImagen || 'https://via.placeholder.com/200x150?text=Sin+imagen'}
                         alt={it.nombre}
                         className="img-fluid rounded"
                       />
@@ -97,7 +97,7 @@ export default function Cart() {
                           <button className="btn btn-sm btn-danger mt-1" onClick={() => removeItem(it.id)}>
                             Eliminar
                           </button>
-                          <Link to={`/producto/${encodeURIComponent(it.id)}`} className="btn btn-sm btn-link mt-2 text-white">
+                          <Link to={`/${it.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}/${encodeURIComponent(it.id)}`} className="btn btn-sm btn-link mt-2 text-white">
                             Ver
                           </Link>
                         </div>
