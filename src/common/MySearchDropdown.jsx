@@ -34,7 +34,6 @@ export default function SearchDropdown({ items = null }) {
   }, []);
 
   const allItems = useMemo(() => (items ?? productos), [items, productos]);
-  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const ref = useRef(null);
@@ -46,7 +45,9 @@ export default function SearchDropdown({ items = null }) {
 
   useEffect(() => {
     function onDocClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target)) {
+        // noop
+      }
     }
     document.addEventListener('click', onDocClick);
     return () => document.removeEventListener('click', onDocClick);
@@ -59,47 +60,28 @@ export default function SearchDropdown({ items = null }) {
   }
 
   return (
-    <div ref={ref} style={{ position: 'relative' }}>
-      <button
-        id="btnSearch"
-        type="button"
-        className="btn btn-outline-secondary"
-        onClick={() => {
-          setOpen(o => !o);
-          setQuery('');
+    <div ref={ref} className="site-search-container">
+      <form
+        className="site-search-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const q = query.trim();
+          if (!q) return;
+          const found = allItems.find(p => p.nombre.toLowerCase().includes(q.toLowerCase()));
+          if (found) navigate(`/producto/${found.id}`);
         }}
       >
-        Buscar
-      </button>
-
-      {open && (
-        <div id="dropdownContent" className="dropdown-menu show" style={{ display: 'block', minWidth: 240, padding: 8 }}>
-          <input
-            id="searchInput"
-            className="form-control mb-2"
-            placeholder="Buscar producto..."
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            autoFocus
-          />
-          <ul id="resultsList" className="list-group">
-            {query.trim().length === 0
-              ? null
-              : results.length === 0
-              ? (<li className="list-group-item">No hay resultados</li>)
-              : results.map((item) => (
-                  <li
-                    key={item.id}
-                    className="list-group-item list-group-item-action"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => onSelect(item)}
-                  >
-                    {item.nombre}
-                  </li>
-                ))}
-          </ul>
-        </div>
-      )}
+        <button type="submit" className="site-search-btn" aria-label="Buscar">
+          <i className="fa fa-search"></i>
+        </button>
+        <input
+          id="searchInput"
+          className="site-search-input"
+          placeholder="Busca los mejores productos y marcas :)"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+        />
+      </form>
     </div>
   );
 }
