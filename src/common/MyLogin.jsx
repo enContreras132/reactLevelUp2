@@ -30,10 +30,10 @@ export default function Login() {
     }
 
     try {
-      // El backend espera 'username' y 'password' (busca por correo en la BD)
+      // El backend espera 'correo' y 'contraseña' (busca por correo en la BD)
       const loginResponse = await api.post('/cliente/login', {
-          username: formData.identifier, 
-          password: formData.password
+          correo: formData.identifier, 
+          contraseña: formData.password
       });
 
       // El backend devuelve: { token, rol, nombre, id, correo?, username? }

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// No usar baseURL para que Vite use el proxy configurado
+// URL directa al backend (sin proxy)
 const api = axios.create({
-    baseURL: '',
+    baseURL: 'http://localhost:8080',
 });
 
 // Esto intercepta todas las peticiones y les pega el token si existe
