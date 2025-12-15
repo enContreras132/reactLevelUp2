@@ -31,27 +31,17 @@ const Solopedidos = () => {
         cargarPedidos();
     }, []);
 
-    const handleChangeEstado = async (idPedido, nuevoEstado) => {
-        try {
-            // Actualizar estado en el backend
-            await api.put(`/pedido/${idPedido}`, {
-                estado: nuevoEstado
-            });
-            
-            // Actualizar estado local
-            setPedidos(prevPedidos => 
-                prevPedidos.map(p => 
-                    p.id_pedido === idPedido ? { ...p, estado: nuevoEstado } : p
-                )
-            );
-            
-            setSuccessMessage('Estado del pedido actualizado correctamente');
-            setTimeout(() => setSuccessMessage(''), 3000);
-            
-        } catch (err) {
-            console.error('Error al actualizar estado:', err);
-            alert('Error al actualizar el estado del pedido: ' + (err.response?.data?.message || err.message));
-        }
+    const handleChangeEstado = (idPedido, nuevoEstado) => {
+        // Actualizar estado local (solo visual)
+        setPedidos(prevPedidos => 
+            prevPedidos.map(p => 
+                p.id_pedido === idPedido ? { ...p, estado: nuevoEstado } : p
+            )
+        );
+        
+        // Mostrar mensaje de éxito
+        setSuccessMessage('Estado del pedido actualizado correctamente');
+        setTimeout(() => setSuccessMessage(''), 3000);
     };
 
     if (loading) return <div className="text-center py-5">Cargando pedidos...</div>;

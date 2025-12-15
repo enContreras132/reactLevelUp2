@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-// URL del backend - usa el proxy de Vite
-const API_URL = import.meta.env.VITE_API_URL || '/api';
-
+// No usar baseURL para que Vite use el proxy configurado
 const api = axios.create({
-    baseURL: API_URL,
+    baseURL: '',
 });
 
 // Esto intercepta todas las peticiones y les pega el token si existe

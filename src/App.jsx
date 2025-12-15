@@ -11,6 +11,7 @@ import Registro from './common/MyRegistro.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import CheckoutPage from './pages/CheckoutPage.jsx'
+import BoletaPage from './pages/BoletaPage.jsx'
 // Layout principal: renderiza Header + Outlet (ruta hija) + Footer
 function Layout() {
   return (
@@ -55,6 +56,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/boleta/:id" element={<BoletaPage />} />
       </Route>
 
       {/*

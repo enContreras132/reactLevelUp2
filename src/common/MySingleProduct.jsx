@@ -1,4 +1,4 @@
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
@@ -18,6 +18,7 @@ function formatCurrency(value) {
 function SingleProduct() {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -146,9 +147,9 @@ function SingleProduct() {
             )}
 
             <div className="mt-auto d-flex gap-2 pt-2">
-              <Link to="/productos" className="btn btn-outline-secondary">
+              <button type="button" className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
                 Volver
-              </Link>
+              </button>
               <button type="button" className="btn btn-primary" onClick={() => addItem(product, 1)}>
                 Agregar al carrito
               </button>

@@ -130,13 +130,14 @@ export default function Checkout() {
 				comuna: {
 					id: parseInt(form.comuna)
 				},
-				monto_total: Math.round(resumen.total)
+				monto_total: Math.round(resumen.total),
+				estado: 'pendiente'
 			};
 
 			console.log('Enviando pedido:', pedidoData);
 
-			// Hacer POST request al backend
-			const response = await api.post('/pedido', pedidoData);
+			// Hacer POST request al backend (el proxy de Vite quitará /api)
+			const response = await api.post('/api/pedido', pedidoData);
 			
 			console.log('Pedido creado exitosamente:', response.data);
 

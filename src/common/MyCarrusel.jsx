@@ -24,15 +24,21 @@ const Carrusel = () => {
     <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-inner mb-5">
         <div className="carousel-item active">
-          <img src="https://i.bolder.run/r/czozMjIxLGc6NjkweA/477efa0d/711248-Mouse_B1.png" className="d-block w-100 mb-5" alt="Legion M600" style={carruselFit} />
+          <Link to="/mouse/3000">
+            <img src="https://i.bolder.run/r/czozMjIxLGc6NjkweA/477efa0d/711248-Mouse_B1.png" className="d-block w-100 mb-5" alt="Legion M600" style={carruselFit} />
+          </Link>
           <h3 className="text-center bbh-sans-bartle-regular text-white">Mouse Gamer Monster</h3>
         </div>
         <div className="carousel-item">
-          <img src="https://media.spdigital.cl/thumbnails/products/8cj7010s_6fe796b6_thumbnail_4096.png" className="d-block w-100 img-hover-zoom mb-5" alt="Kumara K-552" style={carruselFit} />
+          <Link to="/teclado/2000">
+            <img src="https://media.spdigital.cl/thumbnails/products/8cj7010s_6fe796b6_thumbnail_4096.png" className="d-block w-100 img-hover-zoom mb-5" alt="Kumara K-552" style={carruselFit} />
+          </Link>
           <h3 className="text-center bbh-sans-bartle-regular text-white">Kumara K-552</h3>
         </div>
         <div className="carousel-item">
-          <img src="src/assets/images/610-removebg-preview.png" className="d-block w-100 img-hover-zoom mb-5" alt="Razer Cobra Pro" style={carruselFit} />
+          <Link to="/mouse/3001">
+            <img src="src/assets/images/610-removebg-preview.png" className="d-block w-100 img-hover-zoom mb-5" alt="Razer Cobra Pro" style={carruselFit} />
+          </Link>
           <h3 className="text-center bbh-sans-bartle-regular text-white">Razer Cobra Pro HyperSpeed</h3>
         </div>
       </div>
