@@ -1,24 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
 
 const Boleta = () => {
-    const location = useLocation();
+    const { id } = useParams();
     const navigate = useNavigate();
     const [pedido, setPedido] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Obtener el último pedido desde localStorage
-        const ultimaCompra = localStorage.getItem('ultimaCompra');
-        if (ultimaCompra) {
-            const pedidoLocal = JSON.parse(ultimaCompra);
-            setPedido(pedidoLocal);
-            setLoading(false);
-        } else {
-            setLoading(false);
-        }
-    }, []);
+        const cargarPedido = async () => {
+            // Si hay ID en la URL, cargar desde el backend
+            if (id) {
+                try {
+                    const response = await api.get(`/pedido/${id}`);
+                    setPedido(response.data);
+                    setLoading(false);
+                } catch (err) {
+                    console.error('Error al cargar pedido:', err);
+                    setLoading(false);
+                }
+            } else {
+                // Si no hay ID, obtener el último pedido desde localStorage
+                const ultimaCompra = localStorage.getItem('ultimaCompra');
+                if (ultimaCompra) {
+                    const pedidoLocal = JSON.parse(ultimaCompra);
+                    setPedido(pedidoLocal);
+                }
+                setLoading(false);
+            }
+        };
+        
+        cargarPedido();
+    }, [id]);
 
     if (loading) {
         return (
@@ -143,12 +157,8 @@ const Boleta = () => {
                         </div>
 
                         <div className="card-footer bg-light text-center py-3">
-                            <button 
-                                className="btn btn-primary me-2"
-                                onClick={() => window.print()}
-                            >
-                                <i className="bi bi-printer me-2"></i>
-                                Imprimir Boleta
+                            <button className="btn btn-primary me-2">
+                                <i className="bi bi-printer me-2"> Imprimir Boleta</i>
                             </button>
                             <button 
                                 className="btn btn-secondary"

@@ -9,6 +9,7 @@ export default function Checkout() {
 	const { items, total, count, clear } = useCart();
 	const [processing, setProcessing] = useState(false);
 	const [success, setSuccess] = useState(false);
+	const [pedidoId, setPedidoId] = useState(null);
 
 	const [regiones, setRegiones] = useState([]);
 	const [comunas, setComunas] = useState([]);
@@ -35,8 +36,9 @@ export default function Checkout() {
 				const [regionesRes, comunasRes] = await Promise.all([
 				api.get('/region').catch(() => ({ data: [] })),
 				api.get('/comuna').catch(() => ({ data: [] }))
-			]);
-				const comunasData = Array.isArray(comunasRes.data) ? comunasRes.data : [];
+			]);			
+			const regionesData = Array.isArray(regionesRes.data) ? regionesRes.data : [];
+			const comunasData = Array.isArray(comunasRes.data) ? comunasRes.data : [];
 				
 				setRegiones(regionesData);
 				setComunas(comunasData);
@@ -138,6 +140,9 @@ export default function Checkout() {
 			const response = await api.post('/pedido', pedidoData);
 			
 			console.log('Pedido creado exitosamente:', response.data);
+			
+			// Guardar ID del pedido para la boleta
+			setPedidoId(response.data.id_pedido);
 
 			// Guardar último pedido para referencia local
 			try {
@@ -198,8 +203,11 @@ export default function Checkout() {
 						<div className="alert alert-success">
 							<h4 className="text-black">¡Gracias por tu compra!</h4>
 							<p className='text-black'>Tu pedido ha sido procesado correctamente.</p>
-							<div className="d-flex justify-content-center">
-								<Link to="/productos" className="btn btn-primary me-2">Seguir comprando</Link>
+							<div className="d-flex justify-content-center gap-2">
+								<Link to={`/boleta/${pedidoId}`} className="btn btn-success">
+									<i className="bi bi-receipt"></i> Ver Boleta
+								</Link>
+								<Link to="/productos" className="btn btn-primary">Seguir comprando</Link>
 								<Link to="/" className="btn btn-outline-secondary">Ir al inicio</Link>
 							</div>
 						</div>

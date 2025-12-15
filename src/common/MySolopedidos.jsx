@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
 
 const API_URL = '/api';
 
 const Solopedidos = () => {
+    const navigate = useNavigate();
     const [pedidos, setPedidos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -78,6 +80,7 @@ const Solopedidos = () => {
                                 <th>Comuna</th>
                                 <th>Región</th>
                                 <th>Monto Total</th>
+                                <th>Boleta</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,6 +125,15 @@ const Solopedidos = () => {
                                         <td>{pedido.comuna?.region?.nombre || '-'}</td>
                                         <td className="text-end">
                                             <strong>${(pedido.monto_total || 0).toLocaleString('es-CL')}</strong>
+                                        </td>
+                                        <td className="text-center">
+                                            <button
+                                                className="btn btn-sm btn-primary"
+                                                onClick={() => navigate(`/boleta/${pedido.id_pedido}`)}
+                                                title="Ver boleta"
+                                            >
+                                                <i className="bi bi-receipt"></i> Ver Boleta
+                                            </button>
                                         </td>
                                     </tr>
                                 );
