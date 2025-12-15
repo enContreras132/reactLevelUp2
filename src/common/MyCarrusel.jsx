@@ -21,7 +21,7 @@ const Carrusel = () => {
   };
 
   return (
-    <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExample" className="carousel slide mt-5" data-bs-ride="carousel">
       <div className="carousel-inner mb-5">
         <div className="carousel-item active">
           <Link to="/mouse/3000">
