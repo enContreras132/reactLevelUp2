@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './',  // <-- Agregado para que rutas de assets funcionen en dist
+  base: '/',  // <-- Agregado para que rutas de assets funcionen en dist
   server: {
     proxy: {
       '/api': {
