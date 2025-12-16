@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 import { useCart } from '../context/CartContext';
 
 // Función para truncar texto HTML
@@ -10,7 +10,7 @@ const truncateHTML = (html, maxLength = 100) => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = html;
   const text = tempDiv.textContent || tempDiv.innerText || '';
-  
+
   if (text.length <= maxLength) return html;
   return text.substring(0, maxLength) + '<br><br> <strong>Presionar "ver producto" para más detalles...</strong>';
 };
@@ -30,24 +30,23 @@ export default function Productos() {
     try {
       setLoading(true);
       console.log('🔄 Iniciando carga de productos...');
-      
-      const API_URL = '/api';
-      
-      // Llamadas paralelas a todas las APIs
+
+      // Llamadas paralelas a todas las APIs USANDO api (axiosConfig)
+      // Como api ya tiene baseURL configurado, solo necesitamos la ruta relativa
       const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
-        axios.get(`${API_URL}/audifono`).catch(err => {
+        api.get('/audifono').catch(err => {
           console.error('❌ Error audifono:', err.message);
           return { data: [] };
         }),
-        axios.get(`${API_URL}/mouse`).catch(err => {
+        api.get('/mouse').catch(err => {
           console.error('❌ Error mouse:', err.message);
           return { data: [] };
         }),
-        axios.get(`${API_URL}/teclado`).catch(err => {
+        api.get('/teclado').catch(err => {
           console.error('❌ Error teclado:', err.message);
           return { data: [] };
         }),
-        axios.get(`${API_URL}/notebook`).catch(err => {
+        api.get('/notebook').catch(err => {
           console.error('❌ Error notebook:', err.message);
           return { data: [] };
         })
@@ -84,8 +83,8 @@ export default function Productos() {
   const categorias = ["todos", ...new Set(productos.map(p => p.categoria).filter(Boolean))];
 
   // Filtrar productos por categoría
-  const productosFiltrados = categoria === "todos" 
-    ? productos 
+  const productosFiltrados = categoria === "todos"
+    ? productos
     : productos.filter(p => p.categoria === categoria);
 
   if (loading) {
@@ -109,8 +108,8 @@ export default function Productos() {
         <div className="container">
           <div className="alert alert-danger" role="alert">
             {error}
-            <button 
-              className="btn btn-primary ms-3" 
+            <button
+              className="btn btn-primary ms-3"
               onClick={cargarProductos}
             >
               Reintentar
@@ -128,7 +127,7 @@ export default function Productos() {
           <h2>Productos Disponibles</h2>
         </div>
 
-     {/* filtros */}
+        {/* filtros */}
         <div className="filters-menu d-flex gap-2 mb-3 justify-content-center">
           {categorias.map(cat => (
             <button
