@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 import { useCart } from '../context/CartContext';
 
 // Función para truncar texto HTML
@@ -31,23 +31,21 @@ export default function Productos() {
       setLoading(true);
       console.log('🔄 Iniciando carga de productos...');
 
-      const API_URL = '/api';
-
-      // Llamadas paralelas a todas las APIs
+      // Llamadas paralelas a todas las APIs USANDO api (axiosConfig)
       const [audifonosRes, mouseRes, tecladosRes, notebooksRes] = await Promise.all([
-        axios.get(`${API_URL}/audifono`).catch(err => {
+        api.get('/audifono').catch(err => {
           console.error('❌ Error audifono:', err.message);
           return { data: [] };
         }),
-        axios.get(`${API_URL}/mouse`).catch(err => {
+        api.get('/mouse').catch(err => {
           console.error('❌ Error mouse:', err.message);
           return { data: [] };
         }),
-        axios.get(`${API_URL}/teclado`).catch(err => {
+        api.get('/teclado').catch(err => {
           console.error('❌ Error teclado:', err.message);
           return { data: [] };
         }),
-        axios.get(`${API_URL}/notebook`).catch(err => {
+        api.get('/notebook').catch(err => {
           console.error('❌ Error notebook:', err.message);
           return { data: [] };
         })

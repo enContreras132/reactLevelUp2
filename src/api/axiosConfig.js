@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // URL directa al backend (sin proxy)
 const api = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
 });
 
 // Esto intercepta todas las peticiones y les pega el token si existe
